@@ -1,7 +1,6 @@
 # Gile.AutoCAD.Extension
 ### AutoCAD Helpers Class Library
-Thanks to all the Swampers who helped me to learn AutoCAD .NET programming, specifically Tony 'TheMaster' Tanzillo and Thorsten 'kaefer' Meinecke 
-for the discussions about the GetObject<T> and GetObjects<T> methods which were starts points of this library.
+Thanks to all the [Swampers](http://www.theswamp.org/index.php) who helped me learning AutoCAD .NET programming, with a special mention to Tony 'TheMaster' Tanzillo and Thorsten 'kaefer' Meinecke for the discussions about the GetObject<T> and GetObjects<T> methods which were the starts points of this library.
 
 #### This library should help to write code in a more concise and declarative way.
 Example with a method to erase lines in model space which are smaller than a given distance:
