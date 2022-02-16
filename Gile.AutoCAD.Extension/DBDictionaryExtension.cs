@@ -20,8 +20,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns><c>true</c>, if the operations succeeded; <c>false</c>, otherwise.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>key</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static bool TryGetObject<T>(
             this DBDictionary source,
             string key,
@@ -49,8 +49,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns><c>true</c>, if the operations succeeded; <c>false</c>, otherwise.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>parent</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>key</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="parent"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static bool TryGetNamedDictionary(
             this DBDictionary parent,
             string key,
@@ -77,7 +77,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns>The sequence of collected objects.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static IEnumerable<T> GetObjects<T>(
             this DBDictionary source,
@@ -103,8 +103,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="parent">Instance to which the method applies.</param>
         /// <param name="name">Name of the dictionary.</param>
         /// <returns>The found or newly created dictionary.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>parent</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>name</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="parent"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="name"/> is null or empty.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static DBDictionary GetOrCreateNamedDictionary(this DBDictionary parent, string name)
         {
@@ -128,8 +128,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="key">la clé du xrecord.</param>
         /// <returns>The xrecord data or null if the xrecord does not exists.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>key</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static ResultBuffer GetXrecordData(this DBDictionary source, string key)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -151,8 +151,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it did not already exist.</param>
         /// <param name="values">Xrecord data.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>target</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>key</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static void SetXrecordData(this DBDictionary target, string key, params TypedValue[] values)
         {
             target.SetXrecordData(key, new ResultBuffer(values));
@@ -164,8 +164,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it did not already exist.</param>
         /// <param name="data">Xrecord data.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>target</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>key</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static void SetXrecordData(this DBDictionary target, string key, ResultBuffer data)
         {
             Assert.IsNotNull(target, nameof(target));

@@ -15,7 +15,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="dict">Output dictionary.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns><c>true</c>, if the operation succeeded; <c>false</c>, otherwise.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         public static bool TryGetExtensionDictionary(this DBObject source, out DBDictionary dict, OpenMode mode = OpenMode.ForRead)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -35,7 +35,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
         /// <returns>The extension dictionary.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         public static DBDictionary GetOrCreateExtensionDictionary(this DBObject source)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -53,8 +53,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="key">Xrecord key.</param>
         /// <returns>The xrecord data or null if the xrecord does not exists.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>key</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static ResultBuffer GetXDictionaryXrecordData(this DBObject source, string key)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -72,8 +72,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="key">The xrecord key.</param>
         /// <param name="values">The new xrecord data.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>key</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static void SetXDictionaryXrecordData(this DBObject target, string key, params TypedValue[] values)
         {
             target.SetXDictionaryXrecordData(key, new ResultBuffer(values));
@@ -85,8 +85,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="key">The xrecord key.</param>
         /// <param name="data">The new xrecord data.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>key</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static void SetXDictionaryXrecordData(this DBObject target, string key, ResultBuffer data)
         {
             Assert.IsNotNull(target, nameof(target));
@@ -99,8 +99,8 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="data">Extended data (the first TypedValue must be: (1001, &lt;regAppName&gt;)).</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>data</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="data"/> is null.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there's no active transaction.</exception>
         /// <exception cref="Exception">eBadDxfSequence is thrown if the result buffer is not valid.</exception>
         public static void SetXDataForApplication(this DBObject target, ResultBuffer data)
@@ -129,7 +129,7 @@ namespace Gile.AutoCAD.Extension
         /// Opens the object for write.
         /// </summary>
         /// <param name="dBObj">Instance to which the method applies.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>obj</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="obj"/> is null.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there's no active transaction.</exception>
         public static void OpenForWrite(this DBObject dBObj)
         {

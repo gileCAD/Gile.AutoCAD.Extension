@@ -20,7 +20,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="ed">Instance to which the method applies.</param>
         /// <param name="ext">Extents of the zoom.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>ed</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="ed"/> is null.</exception>
         public static void Zoom(this Editor ed, Extents3d ext)
         {
             Assert.IsNotNull(ed, nameof(ed));
@@ -40,7 +40,7 @@ namespace Gile.AutoCAD.Extension
         /// Zooms to the extents of the current viewport.
         /// </summary>
         /// <param name="ed">Instance to which the method applies.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>ed</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="ed"/> is null.</exception>
         public static void ZoomExtents(this Editor ed)
         {
             Database db = ed.Document.Database;
@@ -57,7 +57,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="ed">Instance to which the method applies.</param>
         /// <param name="p1">First window corner.</param>
         /// <param name="p2">Opposite window corner.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>ed</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="ed"/> is null.</exception>
         public static void ZoomWindow(this Editor ed, Point3d p1, Point3d p2)
         {
             using (var line = new Line(p1, p2))
@@ -71,7 +71,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="ed">Instance to which the method applies.</param>
         /// <param name="ids">Collection of the entities ObjectId on which to zoom.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>ed</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="ed"/> is null.</exception>
         public static void ZoomObjects(this Editor ed, IEnumerable<ObjectId> ids)
         {
             Assert.IsNotNull(ed, nameof(ed));
@@ -98,7 +98,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="ed">Instance to which the method applies.</param>
         /// <param name="scale">Scale.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>ed</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="ed"/> is null.</exception>
         public static void ZoomScale(this Editor ed, double scale)
         {
             Assert.IsNotNull(ed, nameof(ed));
@@ -116,7 +116,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="ed">Instance to which the method applies.</param>
         /// <param name="center">Viewport center.</param>
         /// <param name="scale">Scale (default = 1).</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>ed</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="ed"/> is null.</exception>
         public static void ZoomCenter(this Editor ed, Point3d center, double scale = 1.0)
         {
             Assert.IsNotNull(ed, nameof(ed));

@@ -17,7 +17,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
         /// <returns>The effective name of the block reference.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         public static string GetEffectiveName(this BlockReference source)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -30,7 +30,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
         /// <returns>Sequence of pairs Tag/Attribute.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         public static IEnumerable<KeyValuePair<string, AttributeReference>> GetAttributesByTag(this BlockReference source)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -44,7 +44,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
         /// <returns>Collection of pairs Tag/Value.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         public static Dictionary<string, string> GetAttributesValues(this BlockReference source)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -58,9 +58,9 @@ namespace Gile.AutoCAD.Extension
         /// <param name="tag">Attribute tag.</param>
         /// <param name="value">New value.</param>
         /// <returns>The value if attribute was found, null otherwise.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>target</c> is null.</exception>
-        /// <exception cref="ArgumentException">Thrown if <c>tag</c> is null or empty.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <c>value</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name ="tag"/> is null or empty.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="value"/> is null.</exception>
         public static string SetAttributeValue(this BlockReference target, string tag, string value)
         {
             Assert.IsNotNull(target, nameof(target));
@@ -83,8 +83,8 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="attribs">Collection of pairs Tag/Value.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <c>target</c> is null.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <c>attribs</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="attribs"/> is null.</exception>
         public static void SetAttributeValues(this BlockReference target, Dictionary<string, string> attribs)
         {
             Assert.IsNotNull(target, nameof(target));
@@ -106,7 +106,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="attribValues">Collection of pairs Tag/Value.</param>
         /// <returns>The sequence of the newly created attribute references</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>target</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
         public static IEnumerable<AttributeReference> AddAttributeReferences(this BlockReference target, Dictionary<string, string> attribValues)
         {
@@ -138,8 +138,8 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="attDefs">Sequence of attribute definitions.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <c>target</c> is null.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <c>attDeffs</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="attDeffs"/> is null.</exception>
         internal static void ResetAttributes(this BlockReference target, IEnumerable<AttributeDefinition> attDefs)
         {
             Assert.IsNotNull(target, nameof(target));
@@ -177,8 +177,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="propName">Dynamic property name.</param>
         /// <returns>The dynamic property or null if not found.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="ArgumentException">Thrown if <c>propName</c> is null or empty.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name ="propName"/> is null or empty.</exception>
         public static DynamicBlockReferenceProperty GetDynamicProperty(this BlockReference source, string propName)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -197,8 +197,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="propName">Dynamic property name.</param>
         /// <returns>The dynamic property value or null if not found.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="ArgumentException">Thrown if <c>propName</c> is null or empty.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name ="propName"/> is null or empty.</exception>
         public static object GetDynamicPropertyValue(this BlockReference source, string propName)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -215,9 +215,9 @@ namespace Gile.AutoCAD.Extension
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="propName">Dynamic property name.</param>
         /// <param name="value">New property value.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <c>target</c> is null.</exception>
-        /// <exception cref="ArgumentException">Thrown if <c>propName</c> is null or empty.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <c>value</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name ="propName"/> is null or empty.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="value"/> is null.</exception>
         public static void SetDynamicPropertyValue(this BlockReference target, string propName, object value)
         {
             Assert.IsNotNull(target, nameof(target));
@@ -237,8 +237,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="axis">Axis of the mirroring operation.</param>
         /// <param name="eraseSource">Value indicating if the source block reference have to be erased.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <c>axis</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="axis"/> is null.</exception>
         public static void Mirror(this BlockReference source, Line3d axis, bool eraseSource)
         {
             Assert.IsNotNull(source, nameof(source));

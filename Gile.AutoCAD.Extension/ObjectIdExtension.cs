@@ -18,7 +18,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayer">Value indicating if locked layers should be opened.</param>
         /// <returns><c>true</c>, if the operation succeeded; <c>false</c>, otherwise.</returns>
-        /// <exception cref="System.ArgumentException">Throw if <c>id</c> equals ObjectId.Null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="id"/> equals ObjectId.Null.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
         public static bool TryGetObject<T>(
             this ObjectId id,
@@ -49,7 +49,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="forceOpenOnLockedLayer">Value indicating if locked layers should be opened.</param>
         /// <returns>The object opened in given open mode.</returns>
         /// <exception cref="System.InvalidCastException">Thrown if the object type does not match the given type</exception>
-        /// <exception cref="System.ArgumentException">Throw if <c>id</c> equals ObjectId.Null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="id"/> equals ObjectId.Null.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
         public static T GetObject<T>(
             this ObjectId id,

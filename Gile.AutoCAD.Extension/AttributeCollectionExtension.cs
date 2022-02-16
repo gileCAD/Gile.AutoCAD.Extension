@@ -17,7 +17,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayers">Value indicating if locked layers should be opened.</param>
         /// <returns>The sequence of attribute references.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
         public static IEnumerable<AttributeReference> GetObjects(
             this AttributeCollection source,

@@ -16,7 +16,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
         /// <returns>The active top transaction.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>db</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
         public static Transaction GetTopTransaction(this Database db)
         {
@@ -33,7 +33,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="db">Instance to which the method applies.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The named object dictionary.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>db</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         public static DBDictionary GetNOD(this Database db, OpenMode mode = OpenMode.ForRead)
         {
             Assert.IsNotNull(db, nameof(db));
@@ -46,7 +46,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="db">Instance to which the method applies.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The model space.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>db</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         public static BlockTableRecord GetModelSpace(this Database db, OpenMode mode = OpenMode.ForRead)
         {
             Assert.IsNotNull(db, nameof(db));
@@ -59,7 +59,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="db">Instance to which the method applies.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The current space.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>db</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         public static BlockTableRecord GetCurrentSpace(this Database db, OpenMode mode = OpenMode.ForRead)
         {
             Assert.IsNotNull(db, nameof(db));
@@ -73,7 +73,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="exceptModel">Value indicating if the model space layout is left out.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The sequence of block table records.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>db</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         public static IEnumerable<BlockTableRecord> GetLayoutBlockTableRecords(this Database db, bool exceptModel = true, OpenMode mode = OpenMode.ForRead)
         {
             Assert.IsNotNull(db, nameof(db));
@@ -88,7 +88,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns>The sequence of layouts.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>db</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         public static IEnumerable<Layout> GetLayouts(this Database db, bool exceptModel = true, OpenMode mode = OpenMode.ForRead, bool openErased = false)
         {
             Assert.IsNotNull(db, nameof(db));

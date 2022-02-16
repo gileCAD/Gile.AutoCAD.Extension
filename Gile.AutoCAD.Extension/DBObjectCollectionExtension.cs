@@ -11,7 +11,7 @@ namespace Gile.AutoCAD.Extension
         /// Disposes of all objects in the collections.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         public static void DisposeAll(this DBObjectCollection source)
         {
             Assert.IsNotNull(source, nameof(source));

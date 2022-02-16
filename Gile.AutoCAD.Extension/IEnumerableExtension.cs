@@ -42,7 +42,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayers">Value indicating if locked layers should be opened.</param>
         /// <returns>The sequence of opened objects.</returns>
-        /// <exception cref="System.ArgumentNullException">Throw if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
         public static IEnumerable<T> GetObjects<T>(
           this IEnumerable<ObjectId> source,
@@ -73,7 +73,7 @@ namespace Gile.AutoCAD.Extension
         /// <typeparam name="T">Type of objects.</typeparam>
         /// <param name="source">Sequence of DBObjects to upgrade.</param>
         /// <returns>The sequence of opened for write objects (objets on locked layers are discared).</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there's no active transaction.</exception>
         public static IEnumerable<T> UpgradeOpen<T>(this IEnumerable<T> source) where T : DBObject
         {
@@ -99,7 +99,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of the items.</typeparam>
         /// <param name="source">Sequence of disposable objects.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         public static void DisposeAll<T>(this IEnumerable<T> source) where T : IDisposable
         {
             Assert.IsNotNull(source, nameof(source));
@@ -131,8 +131,8 @@ namespace Gile.AutoCAD.Extension
         /// <typeparam name="T">Type of the items.</typeparam>
         /// <param name="source">Sequence to process.</param>
         /// <param name="action">Action to run.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>action</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="action"/> is null.</exception>
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -146,8 +146,8 @@ namespace Gile.AutoCAD.Extension
         /// <typeparam name="T">Type of the items.</typeparam>
         /// <param name="source">Sequence to process.</param>
         /// <param name="action">Indexed action to run.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>action</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="action"/> is null.</exception>
         public static void ForEach<T>(this IEnumerable<T> source, Action<T, int> action)
         {
             Assert.IsNotNull(source, nameof(source));
@@ -157,15 +157,15 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Gets the greatest item of the sequence using the default comparer with the <c>selector</c> function returned values.
+        /// Gets the greatest item of the sequence using the default comparer with the <paramref name ="selector"/> function returned values.
         /// </summary>
         /// <typeparam name="TSource">Type the items.</typeparam>
-        /// <typeparam name="TKey">Type of the returned value of <c>selector</c> function.</typeparam>
+        /// <typeparam name="TKey">Type of the returned value of <paramref name ="selector"/> function.</typeparam>
         /// <param name="source">Sequence to which the method applies.</param>
         /// <param name="selector">Mapping function from <c>TSource</c> to <c>TKey</c>.</param>
         /// <returns>The greatest item in the sequence.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>selector</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="selector"/> is null.</exception>
         public static TSource MaxBy<TSource, TKey>(
             this IEnumerable<TSource> source,
             Func<TSource, TKey> selector)
@@ -174,17 +174,17 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Gets the greatest item of the sequence using <c>comparer</c> with the <c>selector</c> function returned values.
+        /// Gets the greatest item of the sequence using <paramref name ="comparer"/> with the <paramref name ="selector"/> function returned values.
         /// </summary>
         /// <typeparam name="TSource">Type the items.</typeparam>
-        /// <typeparam name="TKey">Type of the returned value of <c>selector</c> function.</typeparam>
+        /// <typeparam name="TKey">Type of the returned value of <paramref name ="selector"/> function.</typeparam>
         /// <param name="source">Sequence to which the method applies.</param>
         /// <param name="selector">Mapping function from <c>TSource</c> to <c>TKey</c>.</param>
         /// <param name="comparer">Comparer used fot the <c>TKey</c> type.</param>
         /// <returns>The greatest item in the sequence.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>selector</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>comparer</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="selector"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="comparer"/> is null.</exception>
         public static TSource MaxBy<TSource, TKey>(
             this IEnumerable<TSource> source,
             Func<TSource, TKey> selector,
@@ -215,15 +215,15 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Gets the smallest item of the sequence using the default comparer with the <c>selector</c> function returned values.
+        /// Gets the smallest item of the sequence using the default comparer with the <paramref name ="selector"/> function returned values.
         /// </summary>
         /// <typeparam name="TSource">Type the items.</typeparam>
-        /// <typeparam name="TKey">Type of the returned value of <c>selector</c> function.</typeparam>
+        /// <typeparam name="TKey">Type of the returned value of <paramref name ="selector"/> function.</typeparam>
         /// <param name="source">Sequence to which the method applies.</param>
         /// <param name="selector">Mapping function from <c>TSource</c> to <c>TKey</c>.</param>
         /// <returns>The smallest item in the sequence.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>selector</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="selector"/> is null.</exception>
         public static TSource MinBy<TSource, TKey>(
             this IEnumerable<TSource> source,
             Func<TSource, TKey> selector)
@@ -232,17 +232,17 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Gets the smallest item of the sequence using the <c>comparer</c> with the <c>selector</c> function returned values.
+        /// Gets the smallest item of the sequence using the <paramref name ="comparer"/> with the <paramref name ="selector"/> function returned values.
         /// </summary>
         /// <typeparam name="TSource">Type the items.</typeparam>
-        /// <typeparam name="TKey">Type of the returned value of <c>selector</c> function.</typeparam>
+        /// <typeparam name="TKey">Type of the returned value of <paramref name ="selector"/> function.</typeparam>
         /// <param name="source">Sequence to which the method applies.</param>
         /// <param name="selector">Mapping function from <c>TSource</c> to <c>TKey</c>.</param>
         /// <param name="comparer">Comparateur utilisé pour le type <c>TKey</c>.</param>
         /// <returns>The smallest item in the sequence.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>selector</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>selector</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="selector"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="selector"/> is null.</exception>
         public static TSource MinBy<TSource, TKey>(
             this IEnumerable<TSource> source,
             Func<TSource, TKey> selector,

@@ -21,7 +21,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayers">Value indicating if locked layers should be opened.</param>
         /// <returns>The sequence of opened objects.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>btr</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="btr"/> is null.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
         public static IEnumerable<T> GetObjects<T>(
           this BlockTableRecord btr,
@@ -58,8 +58,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="owner">Instance to which the method applies.</param>
         /// <param name="entities">Sequence of entities.</param>
         /// <returns>The collection of added entities ObjectId.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>owner</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>entities</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="owner"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="entities"/> is null.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static ObjectIdCollection Add(this BlockTableRecord owner, IEnumerable<Entity> entities)
         {
@@ -84,8 +84,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="owner">Instance to which the method applies.</param>
         /// <param name="entities">Collection of entities.</param>
         /// <returns>The collection of added entities ObjectId.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>owner</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>entities</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="owner"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="entities"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static ObjectIdCollection AddRange(this BlockTableRecord owner, params Entity[] entities)
         {
@@ -98,8 +98,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="owner">Instance to which the method applies.</param>
         /// <param name="entity">Entity to add.</param>
         /// <returns>The ObjectId of added entity.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>owner</c> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>entity</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="owner"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="entity"/> is null.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static ObjectId Add(this BlockTableRecord owner, Entity entity)
         {
@@ -131,8 +131,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="rotation">Rotation</param>
         /// <param name="attribValues">Collection of key/value pairs (Tag/Value).</param>
         /// <returns>The newly created BlockReference.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>target</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>blockName</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="blockName"/> is null or empty.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static BlockReference InsertBlockReference(
             this BlockTableRecord target,
@@ -180,7 +180,7 @@ namespace Gile.AutoCAD.Extension
         /// Synchronizes the attributes of all block references.
         /// </summary>
         /// <param name="target">Instance which the method applies.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>target</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         public static void SynchronizeAttributes(this BlockTableRecord target)
         {
             Assert.IsNotNull(target, nameof(target));

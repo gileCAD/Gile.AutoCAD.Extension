@@ -14,8 +14,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="blockTable">Block table.</param>
         /// <param name="blockName">Block name.</param>
         /// <returns>The ObjectId of the block table record or ObjectId.Null if not found.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>blockTable</c> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <c>blockName</c> is null or empty.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="blockTable"/> is null.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="blockName"/> is null or empty.</exception>
         public static ObjectId GetBlock(this BlockTable blockTable, string blockName)
         {
             Assert.IsNotNull(blockTable, nameof(blockTable));

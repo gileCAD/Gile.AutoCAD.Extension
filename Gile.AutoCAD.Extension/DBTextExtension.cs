@@ -16,7 +16,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="dbText">Instance to which the method applies.</param>
         /// <returns>The center point of the text.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>dbText</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="dbText"/> is null.</exception>
         public static Point3d GetTextBoxCenter(this DBText dbText)
         {
             Assert.IsNotNull(dbText, nameof(dbText));
@@ -54,7 +54,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="dbText">Instance to which the method applies.</param>
         /// <returns>The points(counter-clockwise from lower left).</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>dbText</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="dbText"/> is null.</exception>
         public static Point3d[] GetTextBoxCorners(this DBText dbText)
         {
             Assert.IsNotNull(dbText, nameof(dbText));
@@ -96,8 +96,8 @@ namespace Gile.AutoCAD.Extension
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="axis">Axis of the mirroring operation.</param>
         /// <param name="eraseSource">Value indicating if the source block reference have to be erased.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <c>source</c> is null.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <c>axis</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="axis"/> is null.</exception>
         public static void Mirror(this DBText source, Line3d axis, bool eraseSource)
         {
             Assert.IsNotNull(source, nameof(source));

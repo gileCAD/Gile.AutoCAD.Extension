@@ -18,7 +18,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns>The sequence of records.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static IEnumerable<T> GetObjects<T>(this SymbolTable source, OpenMode mode = OpenMode.ForRead, bool openErased = false) 
             where T : SymbolTableRecord
@@ -37,7 +37,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="symbolTable">Instance to which the method applies.</param>
         /// <returns>The number of pruged records.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>symbolTable</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="symbolTable"/> is null.</exception>
         public static int Purge(this SymbolTable symbolTable)
         {
             Assert.IsNotNull(symbolTable, nameof(symbolTable));
