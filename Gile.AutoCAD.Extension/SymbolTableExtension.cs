@@ -11,7 +11,7 @@ namespace Gile.AutoCAD.Extension
     public static class SymbolTableExtension
     {
         /// <summary>
-        /// Opens the corresponding to the given type in the given open mode.
+        /// Opens the table records in the given open mode.
         /// </summary>
         /// <typeparam name="T">Type of returned object.</typeparam>
         /// <param name="source">Instance to which the method applies.</param>

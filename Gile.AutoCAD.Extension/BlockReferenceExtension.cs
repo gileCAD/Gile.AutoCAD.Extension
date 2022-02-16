@@ -26,7 +26,7 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Gets all the attributes values by tag.
+        /// Gets all the attributes by tag.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
         /// <returns>Sequence of pairs Tag/Attribute.</returns>
@@ -40,7 +40,7 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Gets all the attributes values by tag.
+        /// Gets all the attribute values by tag.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
         /// <returns>Collection of pairs Tag/Value.</returns>

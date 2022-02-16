@@ -42,17 +42,5 @@ namespace Gile.AutoCAD.Extension
             if (string.IsNullOrWhiteSpace(str))
                 throw new System.ArgumentException("eNullOrWhiteSpace", paramName);
         }
-
-        /// <summary>
-        /// Throws eWrongObjectType if the <c>ObjectId</c> is not derived from <c>T</c>.
-        /// </summary>
-        /// <typeparam name="T">Type which <paramref name="id"/> is supposed to dreive from.</typeparam>
-        /// <param name="id"><c>ObjectId</c> which the type have to be evaluated.</param>
-        /// <param name="paramName">Name of the parameter.</param>
-        public static void IsDerivedFrom<T>(ObjectId id, string paramName) where T : DBObject
-        {
-            if (!id.ObjectClass.IsDerivedFrom(RXObject.GetClass(typeof(T))))
-                throw new Exception(ErrorStatus.WrongObjectType, paramName);
-        }
     }
 }

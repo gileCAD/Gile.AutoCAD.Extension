@@ -70,7 +70,7 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Opens the objects corresponding to the given type in the given open mode.
+        /// Opens the entities which type matches to the given one, and return them.
         /// </summary>
         /// <typeparam name="T">Type of returned objects.</typeparam>
         /// <param name="source">Instance to which the method applies.</param>
@@ -123,7 +123,7 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Gets the xrecord data of the dictionary.
+        /// Gets the xrecord data.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="key">la clé du xrecord.</param>
@@ -146,7 +146,7 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Sets the xrecord data of the dictionary.
+        /// Sets the xrecord data.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it did not already exist.</param>
@@ -159,7 +159,7 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Sets the xrecord data of the dictionary.
+        /// Sets the xrecord data.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it did not already exist.</param>

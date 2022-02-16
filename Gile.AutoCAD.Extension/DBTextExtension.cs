@@ -50,7 +50,7 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Gets the points at corners of of the text bounding box.
+        /// Gets the points at corners of the text bounding box.
         /// </summary>
         /// <param name="dbText">Instance to which the method applies.</param>
         /// <returns>The points(counter-clockwise from lower left).</returns>
