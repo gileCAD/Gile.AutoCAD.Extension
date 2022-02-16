@@ -84,7 +84,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="axis">Axis of the mirroring operation.</param>
         /// <param name="eraseSource">Value indicating if the source block reference have to be erased.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="mtext"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="axis"/> is null.</exception>
         public static void Mirror(this MText source, Line3d axis, bool eraseSource)
         {

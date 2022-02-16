@@ -139,7 +139,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="attDefs">Sequence of attribute definitions.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="attDeffs"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="attDefs"/> is null.</exception>
         internal static void ResetAttributes(this BlockReference target, IEnumerable<AttributeDefinition> attDefs)
         {
             Assert.IsNotNull(target, nameof(target));

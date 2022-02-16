@@ -132,7 +132,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="attribValues">Collection of key/value pairs (Tag/Value).</param>
         /// <returns>The newly created BlockReference.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
-        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="blockName"/> is null or empty.</exception>
+        /// <exception cref="System.ArgumentException">Thrown if <paramref name ="blkName"/> is null or empty.</exception>
         /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static BlockReference InsertBlockReference(
             this BlockTableRecord target,

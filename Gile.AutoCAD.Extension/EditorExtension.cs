@@ -131,5 +131,96 @@ namespace Gile.AutoCAD.Extension
         }
 
         #endregion
+
+        #region Selection
+
+        /// <summary>
+        /// Gets a selection set using the supplied prompt selection options, the supplied filter and the supplied predicate.
+        /// </summary>
+        /// <param name="ed">Instance to which the method applies.</param>
+        /// <param name="options">Selection options.</param>
+        /// <param name="filter">Selection filter</param>
+        /// <param name="predicate">Selection predicate.</param>
+        /// <returns>The selection result.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="ed"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
+        public static PromptSelectionResult GetSelection(this Editor ed, PromptSelectionOptions options, SelectionFilter filter, System.Predicate<ObjectId> predicate) =>
+            ed.GetPredicatedSelection(predicate, options, filter);
+
+        /// <summary>
+        /// Gets a selection set using the supplied prompt selection options and the supplied predicate.
+        /// </summary>
+        /// <param name="ed">Instance to which the method applies.</param>
+        /// <param name="options">Selection options.</param>
+        /// <param name="predicate">Selection predicate.</param>
+        /// <returns>The selection result.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="ed"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
+        public static PromptSelectionResult GetSelection(this Editor ed, PromptSelectionOptions options, System.Predicate<ObjectId> predicate) =>
+            ed.GetPredicatedSelection(predicate, options);
+
+        /// <summary>
+        /// Gets a selection set using the supplied filter and the supplied predicate.
+        /// </summary>
+        /// <param name="ed">Instance to which the method applies.</param>
+        /// <param name="filter">Selection filter</param>
+        /// <param name="predicate">Selection predicate.</param>
+        /// <returns>The selection result.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="ed"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
+        public static PromptSelectionResult GetSelection(this Editor ed, SelectionFilter filter, System.Predicate<ObjectId> predicate) =>
+            ed.GetPredicatedSelection(predicate, null, filter);
+
+        /// <summary>
+        /// Gets a selection set using the supplied predicate.
+        /// </summary>
+        /// <param name="ed">Instance to which the method applies.</param>
+        /// <param name="predicate">Selection predicate.</param>
+        /// <returns>The selection result.</returns>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="ed"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
+        public static PromptSelectionResult GetSelection(this Editor ed, System.Predicate<ObjectId> predicate) =>
+            ed.GetPredicatedSelection(predicate, null, null);
+
+        private static PromptSelectionResult GetPredicatedSelection(
+            this Editor ed,
+            System.Predicate<ObjectId> predicate,
+            PromptSelectionOptions options = null,
+            SelectionFilter filter = null)
+        {
+            Assert.IsNotNull(ed, nameof(ed));
+            Assert.IsNotNull(predicate, nameof(predicate));
+
+            void onSelectionAdded(object sender, SelectionAddedEventArgs e)
+            {
+                var ids = e.AddedObjects.GetObjectIds();
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    if (!predicate(ids[i]))
+                        e.Remove(i);
+                }
+            }
+
+            PromptSelectionResult result;
+            ed.SelectionAdded += onSelectionAdded;
+            if (options == null)
+            {
+                if (filter == null)
+                    result = ed.GetSelection();
+                else
+                    result = ed.GetSelection(filter);
+            }
+            else
+            {
+                if (filter == null)
+                    result = ed.GetSelection(options);
+                else
+                    result = ed.GetSelection(options, filter);
+            }
+            ed.SelectionAdded -= onSelectionAdded;
+            return result;
+        }
+
+        #endregion
     }
 }
