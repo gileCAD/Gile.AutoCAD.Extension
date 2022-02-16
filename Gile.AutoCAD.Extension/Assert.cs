@@ -44,7 +44,7 @@ namespace Gile.AutoCAD.Extension
         }
 
         /// <summary>
-        /// Throws eWrongObjectType if the<c>ObjectId</c> is not derived from <c>T</c>/>.
+        /// Throws eWrongObjectType if the <c>ObjectId</c> is not derived from <c>T</c>.
         /// </summary>
         /// <typeparam name="T">Type which <paramref name="id"/> is supposed to dreive from.</typeparam>
         /// <param name="id"><c>ObjectId</c> which the type have to be evaluated.</param>
