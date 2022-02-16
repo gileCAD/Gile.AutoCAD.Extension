@@ -48,7 +48,7 @@ namespace Gile.AutoCAD.Extension
         /// <param name="offsetDist">Offset distance.</param>
         /// <param name="side">Offset side(s).</param>
         /// <returns>A polyline sequence resulting from the offset of the source polyline.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <c>source</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         public static IEnumerable<Polyline> Offset(this Polyline source, double offsetDist, OffsetSide side)
         {
             Assert.IsNotNull(source, nameof(source));

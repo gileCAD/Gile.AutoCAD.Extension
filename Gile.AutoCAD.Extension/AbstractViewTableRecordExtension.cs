@@ -13,7 +13,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="view">Instance to which the method applies.</param>
         /// <returns>The DCS to WCS transformation matrix.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>view</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="view"/> is null.</exception>
         public static Matrix3d EyeToWorld(this AbstractViewTableRecord view)
         {
             Assert.IsNotNull(view, nameof(view));
@@ -28,7 +28,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="view">Instance to which the method applies.</param>
         /// <returns>The WCS to DCS transformation matrix.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <c>view</c> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="view"/> is null.</exception>
         public static Matrix3d WorldToEye(this AbstractViewTableRecord view)
         {
             Assert.IsNotNull(view, nameof(view));
