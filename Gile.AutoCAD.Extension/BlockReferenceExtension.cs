@@ -105,10 +105,10 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="attribValues">Collection of pairs Tag/Value.</param>
-        /// <returns>The sequence of the newly created attribute references</returns>
+        /// <returns>A Dictionary containing the newly created attribute references by tag.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
-        public static IEnumerable<AttributeReference> AddAttributeReferences(this BlockReference target, Dictionary<string, string> attribValues)
+        public static Dictionary<string, AttributeReference> AddAttributeReferences(this BlockReference target, Dictionary<string, string> attribValues)
         {
             Assert.IsNotNull(target, nameof(target));
 
@@ -116,6 +116,7 @@ namespace Gile.AutoCAD.Extension
 
             BlockTableRecord btr = target.BlockTableRecord.GetObject<BlockTableRecord>();
 
+            var attribs = new Dictionary<string, AttributeReference>();
             foreach (AttributeDefinition attDef in btr.GetObjects<AttributeDefinition>())
             {
                 if (!attDef.Constant)
@@ -128,9 +129,10 @@ namespace Gile.AutoCAD.Extension
                     }
                     target.AttributeCollection.AppendAttribute(attRef);
                     tr.AddNewlyCreatedDBObject(attRef, true);
-                    yield return attRef;
+                    attribs[attRef.Tag] = attRef;
                 }
             }
+            return attribs;
         }
 
         /// <summary>
