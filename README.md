@@ -4,7 +4,8 @@ Thanks to all the [Swampers](http://www.theswamp.org/index.php) who helped me le
 
 #### This library should help to write code in a more concise and declarative way.
 Example with a method to erase lines in model space which are smaller than a given distance:
-```
+    
+```c#
 public void EraseShortLines(double minLength)
 {
     var db = Application.DocumentManager.MdiActiveDocument.Database;
@@ -30,7 +31,8 @@ public void EraseShortLines(double minLength)
 }
 ```
 The same method can be written:
-```
+
+```c#
 public void EraseShortLines(double minLength)
 {
     var db = Active.Database;
