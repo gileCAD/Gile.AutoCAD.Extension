@@ -1,6 +1,7 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -107,5 +108,72 @@ namespace Gile.AutoCAD.Extension
         /// <returns>The sequence of layout names.</returns>
         public static IEnumerable<string> GetLayoutNames(this Database db) =>
             db.GetLayouts().OrderBy(l => l.TabOrder).Select(l => l.LayoutName);
+
+        /// <summary>
+        /// Gets the value of the custom property.
+        /// </summary>
+        /// <param name="db">Instance to which the method applies.</param>
+        /// <param name="key">Custome property key.</param>
+        /// <returns>The value of the custom property; or null, if it does not exist.</returns>
+        public static string GetCustomProperty(this Database db, string key)
+        {
+            DatabaseSummaryInfoBuilder sumInfo = new DatabaseSummaryInfoBuilder(db.SummaryInfo);
+            IDictionary custProps = sumInfo.CustomPropertyTable;
+            return ((string)custProps[key]).Trim();
+        }
+
+        /// <summary>
+        /// Gets all the custom properties.
+        /// </summary>
+        /// <param name="db">Instance to which the method applies.</param>
+        /// <returns>A dictionary of custom properties.</returns>
+        public static Dictionary<string, string> GetCustomProperties(this Database db)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            IDictionaryEnumerator dictEnum = db.SummaryInfo.CustomProperties;
+            while (dictEnum.MoveNext())
+            {
+                DictionaryEntry entry = dictEnum.Entry;
+                result.Add((string)entry.Key, ((string)entry.Value).Trim());
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Sets the value of the custom property if it exists; otherwise, add the property.
+        /// </summary>
+        /// <param name="db">Instance to which the method applies.</param>
+        /// <param name="key">Property key.</param>
+        /// <param name="value">Property value.</param>
+        public static void SetCustomProperty(this Database db, string key, string value)
+        {
+            DatabaseSummaryInfoBuilder infoBuilder = new DatabaseSummaryInfoBuilder(db.SummaryInfo);
+            IDictionary custProps = infoBuilder.CustomPropertyTable;
+            if (custProps.Contains(key))
+                custProps[key] = value;
+            else
+                custProps.Add(key, value);
+            db.SummaryInfo = infoBuilder.ToDatabaseSummaryInfo();
+        }
+
+        /// <summary>
+        /// Sets the values of the custom properties if they exist; otherwise, add them.
+        /// </summary>
+        /// <param name="db">Instance to which the method applies.</param>
+        /// <param name="values">KeyValue pairs for properties.</param>
+        public static void SetCustomProperties(this Database db, params KeyValuePair<string, string>[] values)
+        {
+            DatabaseSummaryInfoBuilder infoBuilder = new DatabaseSummaryInfoBuilder(db.SummaryInfo);
+            IDictionary custProps = infoBuilder.CustomPropertyTable;
+            foreach (KeyValuePair<string, string> pair in values)
+            {
+                string key = pair.Key;
+                if (custProps.Contains(key))
+                    custProps[key] = pair.Value;
+                else
+                    custProps.Add(key, pair.Value);
+            }
+            db.SummaryInfo = infoBuilder.ToDatabaseSummaryInfo();
+        }
     }
 }
