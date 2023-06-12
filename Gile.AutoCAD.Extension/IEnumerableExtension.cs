@@ -196,7 +196,7 @@ namespace Gile.AutoCAD.Extension
             using (var iterator = source.GetEnumerator())
             {
                 if (!iterator.MoveNext())
-                    throw new InvalidOperationException("Séquence vide");
+                    throw new InvalidOperationException("Empty sequence");
 
                 var max = iterator.Current;
                 var maxKey = selector(max);
@@ -238,11 +238,11 @@ namespace Gile.AutoCAD.Extension
         /// <typeparam name="TKey">Type of the returned value of <paramref name ="selector"/> function.</typeparam>
         /// <param name="source">Sequence to which the method applies.</param>
         /// <param name="selector">Mapping function from <c>TSource</c> to <c>TKey</c>.</param>
-        /// <param name="comparer">Comparateur utilisé pour le type <c>TKey</c>.</param>
+        /// <param name="comparer">>Comparer used fot the <c>TKey</c> type.</param>
         /// <returns>The smallest item in the sequence.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="selector"/> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="selector"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="comparer"/> is null.</exception>
         public static TSource MinBy<TSource, TKey>(
             this IEnumerable<TSource> source,
             Func<TSource, TKey> selector,
@@ -254,7 +254,7 @@ namespace Gile.AutoCAD.Extension
             using (var iterator = source.GetEnumerator())
             {
                 if (!iterator.MoveNext())
-                    throw new InvalidOperationException("Séquence vide");
+                    throw new InvalidOperationException("Empty sequence");
 
                 var min = iterator.Current;
                 var minKey = selector(min);
