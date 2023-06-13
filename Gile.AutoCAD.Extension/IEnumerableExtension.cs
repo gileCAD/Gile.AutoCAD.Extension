@@ -238,7 +238,7 @@ namespace Gile.AutoCAD.Extension
         /// <typeparam name="TKey">Type of the returned value of <paramref name ="selector"/> function.</typeparam>
         /// <param name="source">Sequence to which the method applies.</param>
         /// <param name="selector">Mapping function from <c>TSource</c> to <c>TKey</c>.</param>
-        /// <param name="comparer">>Comparer used fot the <c>TKey</c> type.</param>
+        /// <param name="comparer">>Comparer used for the <c>TKey</c> type.</param>
         /// <returns>The smallest item in the sequence.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="selector"/> is null.</exception>
