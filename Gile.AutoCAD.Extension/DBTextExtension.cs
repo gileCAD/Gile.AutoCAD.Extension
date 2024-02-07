@@ -32,16 +32,13 @@ namespace Gile.AutoCAD.Extension
                     new TypedValue(71, mirrored),
                     new TypedValue(72, (int)dbText.HorizontalMode),
                     new TypedValue(73, (int)dbText.VerticalMode));
-
             var xform =
                 Matrix3d.Displacement(dbText.Position.GetAsVector()) *
                 Matrix3d.Rotation(dbText.Rotation, dbText.Normal, Point3d.Origin) *
                 Matrix3d.PlaneToWorld(new Plane(Point3d.Origin, dbText.Normal));
-
             var point1 = new double[3];
             var point2 = new double[3];
             acedTextBox(rb.UnmanagedObject, point1, point2);
-
             return new Point3d(
                 (point1[0] + point2[0]) / 2.0,
                 (point1[1] + point2[1]) / 2.0,
@@ -70,17 +67,13 @@ namespace Gile.AutoCAD.Extension
                     new TypedValue(71, mirrored),
                     new TypedValue(72, (int)dbText.HorizontalMode),
                     new TypedValue(73, (int)dbText.VerticalMode));
-
             var point1 = new double[3];
             var point2 = new double[3];
-
             acedTextBox(rb.UnmanagedObject, point1, point2);
-
             var xform =
                 Matrix3d.Displacement(dbText.Position.GetAsVector()) *
                 Matrix3d.Rotation(dbText.Rotation, dbText.Normal, Point3d.Origin) *
                 Matrix3d.PlaneToWorld(new Plane(Point3d.Origin, dbText.Normal));
-
             return new[]
             {
                 new Point3d(point1).TransformBy(xform),
@@ -105,15 +98,11 @@ namespace Gile.AutoCAD.Extension
 
             var db = source.Database;
             var tr = db.GetTopTransaction();
-
             DBText mirrored;
             if (eraseSource)
             {
                 mirrored = source;
-                if (!mirrored.IsWriteEnabled)
-                {
-                    tr.GetObject(mirrored.ObjectId, OpenMode.ForWrite);
-                }
+                mirrored.OpenForWrite();
             }
             else
             {
@@ -123,7 +112,6 @@ namespace Gile.AutoCAD.Extension
                 mirrored = (DBText)tr.GetObject(mapping[source.ObjectId].Value, OpenMode.ForWrite);
             }
             mirrored.TransformBy(Matrix3d.Mirroring(axis));
-
             if (!db.Mirrtext)
             {
                 var pts = mirrored.GetTextBoxCorners();

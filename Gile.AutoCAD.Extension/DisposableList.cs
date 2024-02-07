@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Autodesk.AutoCAD.DatabaseServices;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,6 +26,13 @@ namespace Gile.AutoCAD.Extension
             : base(collection) { }
 
         /// <summary>
+        /// Creates a new instance by copying the collection items.
+        /// </summary>
+        /// <param name="collection">Collection whose elements are copied into the new set.</param>
+        public DisposableList(DBObjectCollection collection)
+            : base((IEnumerable<T>)collection.Cast<DBObject>()) { }
+
+        /// <summary>
         /// Creates a new empty instance.
         /// </summary>
         /// <param name="capacity">Initial cpacity</param>
@@ -35,28 +44,9 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         public void Dispose()
         {
-            if (0 < Count)
-            {
-                Exception last = null;
-                var list = this.ToList();
-                Clear();
-                foreach (T item in list)
-                {
-                    if (item != null)
-                    {
-                        try
-                        {
-                            item.Dispose();
-                        }
-                        catch (Exception ex)
-                        {
-                            last = last ?? ex;
-                        }
-                    }
-                }
-                if (last != null)
-                    throw last;
-            }
+            var list = this.ToList();
+            Clear();
+            list.DisposeAll();
         }
 
         /// <summary>
@@ -70,7 +60,9 @@ namespace Gile.AutoCAD.Extension
             foreach (T item in items)
             {
                 if (Remove(item))
+                {
                     yield return item;
+                }
             }
         }
     }

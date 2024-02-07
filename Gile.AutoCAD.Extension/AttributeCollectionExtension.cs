@@ -26,13 +26,16 @@ namespace Gile.AutoCAD.Extension
             bool forceOpenOnLockedLayers = false)
         {
             Assert.IsNotNull(source, nameof(source));
+
             if (source.Count > 0)
             {
                 var tr = source[0].Database.GetTopTransaction();
                 foreach (ObjectId id in source)
                 {
                     if (!id.IsErased || openErased)
+                    {
                         yield return (AttributeReference)tr.GetObject(id, mode, openErased, forceOpenOnLockedLayers);
+                    }
                 }
             }
         }

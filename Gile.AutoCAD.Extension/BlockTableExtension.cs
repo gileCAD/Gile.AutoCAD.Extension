@@ -20,12 +20,12 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(blockTable, nameof(blockTable));
             Assert.IsNotNullOrWhiteSpace(blockName, nameof(blockName));
+
             if (blockTable.Has(blockName))
                 return blockTable[blockName];
             try
             {
-                string blockPath = HostApplicationServices.Current.FindFile(
-                    blockName + ".dwg", blockTable.Database, FindFileHint.Default);
+                string blockPath = HostApplicationServices.Current.FindFile(blockName + ".dwg", blockTable.Database, FindFileHint.Default);
                 blockTable.OpenForWrite();
                 using (var tmpDb = new Database(false, true))
                 {

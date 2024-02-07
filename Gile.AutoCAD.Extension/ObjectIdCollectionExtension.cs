@@ -33,14 +33,13 @@ namespace Gile.AutoCAD.Extension
             if (0 < source.Count)
             {
                 var tr = source[0].Database.GetTopTransaction();
-
                 var rxClass = RXObject.GetClass(typeof(T));
                 foreach (ObjectId id in source)
                 {
-                    if (id.ObjectClass == rxClass || id.ObjectClass.IsDerivedFrom(rxClass))
+                    if ((id.ObjectClass == rxClass || id.ObjectClass.IsDerivedFrom(rxClass)) &&
+                        (!id.IsErased || openErased))
                     {
-                        if (!id.IsErased || openErased)
-                            yield return (T)tr.GetObject(id, mode, openErased, forceOpenOnLockedLayers);
+                        yield return (T)tr.GetObject(id, mode, openErased, forceOpenOnLockedLayers);
                     }
                 }
             }

@@ -1,5 +1,7 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 
+using System.Linq;
+
 namespace Gile.AutoCAD.Extension
 {
     /// <summary>
@@ -15,28 +17,10 @@ namespace Gile.AutoCAD.Extension
         public static void DisposeAll(this DBObjectCollection source)
         {
             Assert.IsNotNull(source, nameof(source));
-            if (source.Count > 0)
-            {
-                System.Exception last = null; 
-                foreach (DBObject obj in source)
-                {
-                    if (obj != null)
-                    {
-                        try
-                        {
-                            obj.Dispose();
-                        }
-                        catch (System.Exception ex)
-                        {
-                            last = last ?? ex;
-                        }
-                    }
-                }
-                source.Clear();
-                if (last != null)
-                    throw last;
-            }
-            source.Dispose();
+
+            var list = source.Cast<DBObject>().ToList();
+            source.Clear();
+            list.DisposeAll();
         }
     }
 }

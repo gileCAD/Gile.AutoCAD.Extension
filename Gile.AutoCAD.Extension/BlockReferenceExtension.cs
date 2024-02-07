@@ -34,6 +34,7 @@ namespace Gile.AutoCAD.Extension
         public static IEnumerable<KeyValuePair<string, AttributeReference>> GetAttributesByTag(this BlockReference source)
         {
             Assert.IsNotNull(source, nameof(source));
+
             return source
                 .AttributeCollection.GetObjects()
                 .Select(att => new KeyValuePair<string, AttributeReference>(att.Tag, att));
@@ -48,7 +49,10 @@ namespace Gile.AutoCAD.Extension
         public static Dictionary<string, string> GetAttributesValues(this BlockReference source)
         {
             Assert.IsNotNull(source, nameof(source));
-            return source.GetAttributesByTag().ToDictionary(p => p.Key, p => p.Value.TextString);
+
+            return source
+                .GetAttributesByTag()
+                .ToDictionary(p => p.Key, p => p.Value.TextString);
         }
 
         /// <summary>
@@ -90,11 +94,12 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(target, nameof(target));
             Assert.IsNotNull(attribs, nameof(attribs));
 
+            var tr = target.Database.GetTopTransaction();
             foreach (AttributeReference attRef in target.AttributeCollection.GetObjects())
             {
                 if (attribs.ContainsKey(attRef.Tag))
                 {
-                    attRef.OpenForWrite();
+                    tr.GetObject(attRef.ObjectId, OpenMode.ForWrite);
                     attRef.TextString = attribs[attRef.Tag];
                 }
             }
@@ -112,10 +117,8 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(target, nameof(target));
 
-            Transaction tr = target.Database.GetTopTransaction();
-
-            BlockTableRecord btr = target.BlockTableRecord.GetObject<BlockTableRecord>();
-
+            var tr = target.Database.GetTopTransaction();
+            var btr = (BlockTableRecord)tr.GetObject(target.BlockTableRecord, OpenMode.ForRead);
             var attribs = new Dictionary<string, AttributeReference>();
             foreach (AttributeDefinition attDef in btr.GetObjects<AttributeDefinition>())
             {
@@ -147,6 +150,7 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(target, nameof(target));
             Assert.IsNotNull(attDefs, nameof(attDefs));
 
+            var tr = target.Database.GetTopTransaction();
             var attValues = new Dictionary<string, string>();
             foreach (AttributeReference attRef in target.AttributeCollection.GetObjects(OpenMode.ForWrite))
             {
@@ -169,7 +173,7 @@ namespace Gile.AutoCAD.Extension
                     attRef.TextString = attValues[attDef.Tag];
                 }
                 target.AttributeCollection.AppendAttribute(attRef);
-                target.Database.TransactionManager.AddNewlyCreatedDBObject(attRef, true);
+                tr.AddNewlyCreatedDBObject(attRef, true);
             }
         }
 
@@ -186,10 +190,13 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(source, nameof(source));
             Assert.IsNotNullOrWhiteSpace(propName, nameof(propName));
 
-            if (source.IsDynamicBlock)
-                foreach (DynamicBlockReferenceProperty prop in source.DynamicBlockReferencePropertyCollection)
-                    if (prop.PropertyName.Equals(propName))
-                        return prop;
+            foreach (DynamicBlockReferenceProperty prop in source.DynamicBlockReferencePropertyCollection)
+            {
+                if (prop.PropertyName.Equals(propName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return prop;
+                }
+            }
             return null;
         }
 
@@ -206,9 +213,8 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(source, nameof(source));
             Assert.IsNotNullOrWhiteSpace(propName, nameof(propName));
 
-            DynamicBlockReferenceProperty prop = source.GetDynamicProperty(propName);
-            if (prop == null) return null;
-            return prop.Value;
+            var prop = source.GetDynamicProperty(propName);
+            return prop?.Value;
         }
 
         /// <summary>
@@ -225,11 +231,13 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(target, nameof(target));
             Assert.IsNotNullOrWhiteSpace(propName, nameof(propName));
             Assert.IsNotNull(value, nameof(value));
-            DynamicBlockReferenceProperty prop = target.GetDynamicProperty(propName);
-            if (prop != null)
+
+            var prop = target.GetDynamicProperty(propName);
+            if (prop != null && prop.Value != value)
             {
-                try { prop.Value = value; }
-                catch { }
+                prop.Value = (prop.PropertyTypeCode == 1 && !(value is double)) ?
+                    Convert.ToDouble(value) :
+                    value;
             }
         }
 
@@ -248,7 +256,6 @@ namespace Gile.AutoCAD.Extension
 
             var db = source.Database;
             var tr = db.GetTopTransaction();
-
             BlockReference mirrored;
             if (eraseSource)
             {
@@ -266,7 +273,6 @@ namespace Gile.AutoCAD.Extension
                 mirrored = (BlockReference)tr.GetObject(mapping[source.ObjectId].Value, OpenMode.ForWrite);
             }
             mirrored.TransformBy(Matrix3d.Mirroring(axis));
-
             if (!db.Mirrtext)
             {
                 foreach (ObjectId id in mirrored.AttributeCollection)

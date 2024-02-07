@@ -39,12 +39,14 @@ namespace Gile.AutoCAD.Extension
         public static DBDictionary GetOrCreateExtensionDictionary(this DBObject source)
         {
             Assert.IsNotNull(source, nameof(source));
+
+            var tr = source.Database.GetTopTransaction();
             if (source.ExtensionDictionary == ObjectId.Null)
             {
                 source.OpenForWrite();
                 source.CreateExtensionDictionary();
             }
-            return source.ExtensionDictionary.GetObject<DBDictionary>();
+            return (DBDictionary)tr.GetObject(source.ExtensionDictionary, OpenMode.ForRead);
         }
 
         /// <summary>
@@ -59,6 +61,7 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(source, nameof(source));
             Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+
             if (!source.TryGetExtensionDictionary(out DBDictionary xdict))
             {
                 return null;
@@ -76,6 +79,9 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static void SetXDictionaryXrecordData(this DBObject target, string key, params TypedValue[] values)
         {
+            Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+
             target.SetXDictionaryXrecordData(key, new ResultBuffer(values));
         }
 
@@ -91,6 +97,7 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(target, nameof(target));
             Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+
             target.GetOrCreateExtensionDictionary().SetXrecordData(key, data);
         }
 
@@ -107,18 +114,19 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(target, nameof(target));
             Assert.IsNotNull(data, nameof(data));
-            Database db = target.Database;
-            Transaction tr = db.GetTopTransaction();
+
+            var db = target.Database;
+            var tr = db.GetTopTransaction();
             var typedValue = data.AsArray()[0];
             if (typedValue.TypeCode != 1001)
                 throw new Exception(ErrorStatus.BadDxfSequence);
             string appName = (string)typedValue.Value;
-            RegAppTable regAppTable = db.RegAppTableId.GetObject<RegAppTable>();
+            var regAppTable = (RegAppTable)tr.GetObject(db.RegAppTableId, OpenMode.ForRead);
             if (!regAppTable.Has(appName))
             {
                 var regApp = new RegAppTableRecord();
                 regApp.Name = appName;
-                regAppTable.OpenForWrite();
+                tr.GetObject(db.RegAppTableId, OpenMode.ForWrite);
                 regAppTable.Add(regApp);
                 tr.AddNewlyCreatedDBObject(regApp, true);
             }
@@ -136,7 +144,10 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(dbObj, nameof(dbObj));
 
             if (!dbObj.IsWriteEnabled)
-                dbObj.Database.GetTopTransaction().GetObject(dbObj.ObjectId, OpenMode.ForWrite);
+            {
+                var tr = dbObj.Database.GetTopTransaction();
+                tr.GetObject(dbObj.ObjectId, OpenMode.ForWrite);
+            }
         }
     }
 }

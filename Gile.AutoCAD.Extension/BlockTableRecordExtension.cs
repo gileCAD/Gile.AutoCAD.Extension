@@ -30,8 +30,9 @@ namespace Gile.AutoCAD.Extension
           bool forceOpenOnLockedLayers = false) where T : Entity
         {
             Assert.IsNotNull(btr, nameof(btr));
+
             var tr = btr.Database.GetTopTransaction();
-            BlockTableRecord source = openErased ? btr.IncludingErased : btr;
+            var source = openErased ? btr.IncludingErased : btr;
             if (typeof(T) == typeof(Entity))
             {
                 foreach (ObjectId id in source)
@@ -65,6 +66,7 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(owner, nameof(owner));
             Assert.IsNotNull(entities, nameof(entities));
+
             var tr = owner.Database.GetTopTransaction();
             var ids = new ObjectIdCollection();
             using (var ents = new DisposableSet<Entity>(entities))
@@ -89,6 +91,9 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static ObjectIdCollection AddRange(this BlockTableRecord owner, params Entity[] entities)
         {
+            Assert.IsNotNull(owner, nameof(owner));
+            Assert.IsNotNull(entities, nameof(entities));
+
             return owner.Add(entities);
         }
 
@@ -105,10 +110,11 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(owner, nameof(owner));
             Assert.IsNotNull(entity, nameof(entity));
+
             var tr = owner.Database.GetTopTransaction();
             try
             {
-                ObjectId id = owner.AppendEntity(entity);
+                var id = owner.AppendEntity(entity);
                 tr.AddNewlyCreatedDBObject(entity, true);
                 return id;
             }
@@ -149,28 +155,20 @@ namespace Gile.AutoCAD.Extension
 
             var db = target.Database;
             var tr = db.GetTopTransaction();
-
             BlockReference br = null;
-            BlockTable bt = db.BlockTableId.GetObject<BlockTable>();
-
-            // Récupérer l'ObjectId du bloc 'blockName' (importé s'il n'était pas présent dans la table des blocs)
-            ObjectId btrId = bt.GetBlock(blkName);
-
-            // si la définition de bloc est bien dans la table des blocs
+            var bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+            var btrId = bt.GetBlock(blkName);
             if (btrId != ObjectId.Null)
             {
-                // insertion d'une référence au point donné
                 br = new BlockReference(insertPoint, btrId) { ScaleFactors = new Scale3d(xScale, yScale, zScale), Rotation = rotation };
-                BlockTableRecord btr = btrId.GetObject<BlockTableRecord>();
+                var btr = (BlockTableRecord)tr.GetObject(btrId, OpenMode.ForRead);
                 if (btr.Annotative == AnnotativeStates.True)
                 {
-                    ObjectContextManager ocm = db.ObjectContextManager;
-                    ObjectContextCollection occ = ocm.GetContextCollection("ACDB_ANNOTATIONSCALES");
-                    Autodesk.AutoCAD.Internal.ObjectContexts.AddContext(br, occ.CurrentContext);
+                    var objectContextManager = db.ObjectContextManager;
+                    var objectContextCollection = objectContextManager.GetContextCollection("ACDB_ANNOTATIONSCALES");
+                    Autodesk.AutoCAD.Internal.ObjectContexts.AddContext(br, objectContextCollection.CurrentContext);
                 }
                 target.Add(br);
-
-                // ajout des attributs et affectations de valeurs
                 br.AddAttributeReferences(attribValues);
             }
             return br;

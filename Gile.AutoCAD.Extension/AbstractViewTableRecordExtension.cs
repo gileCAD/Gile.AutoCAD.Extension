@@ -17,6 +17,7 @@ namespace Gile.AutoCAD.Extension
         public static Matrix3d EyeToWorld(this AbstractViewTableRecord view)
         {
             Assert.IsNotNull(view, nameof(view));
+
             return
                 Matrix3d.Rotation(-view.ViewTwist, view.ViewDirection, view.Target) *
                 Matrix3d.Displacement(view.Target.GetAsVector()) *
@@ -32,6 +33,7 @@ namespace Gile.AutoCAD.Extension
         public static Matrix3d WorldToEye(this AbstractViewTableRecord view)
         {
             Assert.IsNotNull(view, nameof(view));
+
             return
                 Matrix3d.WorldToPlane(view.ViewDirection) *
                 Matrix3d.Displacement(view.Target.GetAsVector().Negate()) *

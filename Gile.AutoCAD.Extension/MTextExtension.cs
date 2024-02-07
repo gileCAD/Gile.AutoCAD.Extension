@@ -93,7 +93,6 @@ namespace Gile.AutoCAD.Extension
 
             var db = source.Database;
             var tr = db.GetTopTransaction();
-
             MText mirrored;
             if (eraseSource)
             {

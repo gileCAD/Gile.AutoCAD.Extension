@@ -32,12 +32,8 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(source, nameof(source));
             Assert.IsNotNullOrWhiteSpace(key, nameof(key));
 
-            obj = default(T);
-            if (source.Contains(key) && source.GetAt(key).TryGetObject(out obj, mode, openErased))
-            {
-                return true;
-            }
-            return false;
+            obj = default;
+            return source.Contains(key) && source.GetAt(key).TryGetObject(out obj, mode, openErased);
         }
 
         /// <summary>
@@ -62,11 +58,7 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNullOrWhiteSpace(key, nameof(key));
 
             dict = null;
-            if (parent.Contains(key) && parent.GetAt(key).TryGetObject(out dict, mode, openErased))
-            {
-                return true;
-            }
-            return false;
+            return parent.Contains(key) && parent.GetAt(key).TryGetObject(out dict, mode, openErased);
         }
 
         /// <summary>
@@ -86,6 +78,7 @@ namespace Gile.AutoCAD.Extension
             where T : DBObject
         {
             Assert.IsNotNull(source, nameof(source));
+
             var tr = source.Database.GetTopTransaction();
             var rxc = RXObject.GetClass(typeof(T));
             foreach (DBDictionaryEntry entry in openErased ? source.IncludingErased : source)
@@ -110,10 +103,11 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(parent, nameof(parent));
             Assert.IsNotNullOrWhiteSpace(name, nameof(name));
+
             var tr = parent.Database.GetTopTransaction();
             if (parent.Contains(name))
             {
-                return parent.GetAt(name).GetObject<DBDictionary>();
+                return (DBDictionary)tr.GetObject(parent.GetAt(name), OpenMode.ForRead);
             }
             parent.OpenForWrite();
             var dict = new DBDictionary();
@@ -141,7 +135,9 @@ namespace Gile.AutoCAD.Extension
             }
             var id = (ObjectId)source[key];
             if (!id.TryGetObject(out Xrecord xrec))
+            {
                 return null;
+            }
             return xrec.Data;
         }
 
@@ -155,6 +151,9 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static void SetXrecordData(this DBDictionary target, string key, params TypedValue[] values)
         {
+            Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+
             target.SetXrecordData(key, new ResultBuffer(values));
         }
 
@@ -170,17 +169,19 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(target, nameof(target));
             Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+
+            var tr = target.Database.GetTopTransaction();
             Xrecord xrec;
             if (target.Contains(key))
             {
-                xrec = ((ObjectId)target[key]).GetObject<Xrecord>(OpenMode.ForWrite);
+                xrec = (Xrecord)tr.GetObject(target.GetAt(key), OpenMode.ForWrite);
             }
             else
             {
                 target.OpenForWrite();
                 xrec = new Xrecord();
                 target.SetAt(key, xrec);
-                target.Database.TransactionManager.TopTransaction.AddNewlyCreatedDBObject(xrec, true);
+                tr.AddNewlyCreatedDBObject(xrec, true);
             }
             xrec.Data = data;
         }
