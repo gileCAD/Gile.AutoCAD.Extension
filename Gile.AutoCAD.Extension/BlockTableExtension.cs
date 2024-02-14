@@ -26,7 +26,6 @@ namespace Gile.AutoCAD.Extension
             try
             {
                 string blockPath = HostApplicationServices.Current.FindFile(blockName + ".dwg", blockTable.Database, FindFileHint.Default);
-                blockTable.OpenForWrite();
                 using (var tmpDb = new Database(false, true))
                 {
                     tmpDb.ReadDwgFile(blockPath, FileOpenMode.OpenForReadAndAllShare, true, null);

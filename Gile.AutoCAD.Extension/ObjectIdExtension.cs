@@ -15,15 +15,17 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of the output object.</typeparam>
         /// <param name="id">ObjectId to open.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="obj">Output object.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayer">Value indicating if locked layers should be opened.</param>
         /// <returns><c>true</c>, if the operation succeeded; <c>false</c>, otherwise.</returns>
         /// <exception cref="Exception">eNullObjectId is thrown if <paramref name ="id"/> equals <c>ObjectId.Null</c>.</exception>
-        /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static bool TryGetObject<T>(
             this ObjectId id,
+            Transaction tr,
             out T obj,
             OpenMode mode = OpenMode.ForRead,
             bool openErased = false,
@@ -31,17 +33,15 @@ namespace Gile.AutoCAD.Extension
             where T : DBObject
         {
             Assert.IsNotObjectIdNull(id, nameof(id));
+            Assert.IsNotNull(tr, nameof(tr));
 
-            var tr = id.Database.GetTopTransaction();
             obj = default;
             if (!id.ObjectClass.IsDerivedFrom(RXObject.GetClass(typeof(T))))
             {
                 return false;
             }
             obj = (T)tr.GetObject(id, mode, openErased, forceOpenOnLockedLayer);
-            {
-                return true;
-            }
+            return true;
         }
 
         /// <summary>
@@ -49,23 +49,25 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of the object to return.</typeparam>
         /// <param name="id">ObjectId to open.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayer">Value indicating if locked layers should be opened.</param>
         /// <returns>The object opened in given open mode.</returns>
         /// <exception cref="System.InvalidCastException">Thrown if the object type does not match the given type</exception>
         /// <exception cref="Exception">eNullObjectId is thrown if <paramref name ="id"/> equals <c>ObjectId.Null</c>.</exception>
-        /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static T GetObject<T>(
             this ObjectId id,
+            Transaction tr,
             OpenMode mode = OpenMode.ForRead,
             bool openErased = false,
             bool forceOpenOnLockedLayer = false)
             where T : DBObject
         {
             Assert.IsNotObjectIdNull(id, nameof(id));
+            Assert.IsNotNull(tr, nameof(tr));
 
-            var tr = id.Database.GetTopTransaction();
             return (T)tr.GetObject(id, mode, openErased, forceOpenOnLockedLayer);
         }
 

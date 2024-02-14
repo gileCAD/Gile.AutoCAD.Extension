@@ -82,10 +82,10 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(ed, nameof(ed));
             Assert.IsNotNull(ids, nameof(ids));
 
-            using (Transaction tr = ed.Document.TransactionManager.StartTransaction())
+            using (Transaction tr = ed.Document.TransactionManager.StartOpenCloseTransaction())
             {
                 Extents3d ext = ids
-                    .GetObjects<Entity>()
+                    .GetObjects<Entity>(tr)
                     .Select(ent => ent.Bounds)
                     .Where(b => b.HasValue)
                     .Select(b => b.Value)

@@ -1,6 +1,8 @@
-﻿using Autodesk.AutoCAD.ApplicationServices;
+﻿using Autodesk.AutoCAD.ApplicationServices.Core;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
+
+using AcAp = Autodesk.AutoCAD.ApplicationServices;
 
 // Inspired by Scott McFarlane
 // https://www.autodesk.com/autodesk-university/class/Being-Remarkable-C-NET-AutoCAD-Developer-2015#handout
@@ -15,7 +17,7 @@ namespace Gile.AutoCAD.Extension
         /// <summary>
         /// Gets the active Document object.
         /// </summary>
-        public static Document Document => Application.DocumentManager.MdiActiveDocument;
+        public static AcAp.Document Document => Application.DocumentManager.MdiActiveDocument;
 
         /// <summary>
         /// Gets the active Database object.

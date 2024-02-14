@@ -15,17 +15,18 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of returned object.</typeparam>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns>The sequence of records.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
-        public static IEnumerable<T> GetObjects<T>(this SymbolTable source, OpenMode mode = OpenMode.ForRead, bool openErased = false)
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static IEnumerable<T> GetObjects<T>(this SymbolTable source, Transaction tr, OpenMode mode = OpenMode.ForRead, bool openErased = false)
             where T : SymbolTableRecord
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
 
-            var tr = source.Database.GetTopTransaction();
             foreach (ObjectId id in openErased ? source.IncludingErased : source)
             {
                 yield return (T)tr.GetObject(id, mode, openErased, false);
@@ -36,14 +37,16 @@ namespace Gile.AutoCAD.Extension
         /// Purges the unreferenced symbol table records.
         /// </summary>
         /// <param name="symbolTable">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <returns>The number of pruged records.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="symbolTable"/> is null.</exception>
-        public static int Purge(this SymbolTable symbolTable)
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static int Purge(this SymbolTable symbolTable, Transaction tr)
         {
             Assert.IsNotNull(symbolTable, nameof(symbolTable));
+            Assert.IsNotNull(tr, nameof(tr));
 
             Database db = symbolTable.Database;
-            var tr = db.GetTopTransaction();
             int cnt = 0;
             var unpurgeable = new HashSet<ObjectId>();
             while (true)

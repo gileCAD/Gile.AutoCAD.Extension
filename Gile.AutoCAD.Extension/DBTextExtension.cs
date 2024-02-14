@@ -87,22 +87,24 @@ namespace Gile.AutoCAD.Extension
         /// Mirrors the text honoring the value of MIRRTEXT system variable.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="axis">Axis of the mirroring operation.</param>
         /// <param name="eraseSource">Value indicating if the source block reference have to be erased.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="axis"/> is null.</exception>
-        public static void Mirror(this DBText source, Line3d axis, bool eraseSource)
+        public static void Mirror(this DBText source, Transaction tr, Line3d axis, bool eraseSource)
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNull(axis, nameof(axis));
 
             var db = source.Database;
-            var tr = db.GetTopTransaction();
             DBText mirrored;
             if (eraseSource)
             {
                 mirrored = source;
-                mirrored.OpenForWrite();
+                mirrored.OpenForWrite(tr);
             }
             else
             {

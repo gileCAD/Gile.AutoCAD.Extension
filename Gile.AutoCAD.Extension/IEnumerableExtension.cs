@@ -17,23 +17,25 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of object to return.</typeparam>
         /// <param name="source">Sequence of ObjectIds.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayers">Value indicating if locked layers should be opened.</param>
         /// <returns>The sequence of opened objects.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static IEnumerable<T> GetObjects<T>(
           this IEnumerable<ObjectId> source,
+          Transaction tr,
           OpenMode mode = OpenMode.ForRead,
           bool openErased = false,
           bool forceOpenOnLockedLayers = false) where T : DBObject
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(source));
 
             if (source.Any())
             {
-                var tr = source.First().Database.GetTopTransaction();
                 var rxClass = RXObject.GetClass(typeof(T));
                 foreach (ObjectId id in source)
                 {
@@ -51,10 +53,11 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of objects.</typeparam>
         /// <param name="source">Sequence of DBObjects to upgrade.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <returns>The sequence of opened for write objects (objets on locked layers are discared).</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there's no active transaction.</exception>
-        public static IEnumerable<T> UpgradeOpen<T>(this IEnumerable<T> source) where T : DBObject
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static IEnumerable<T> UpgradeOpen<T>(this IEnumerable<T> source, Transaction tr) where T : DBObject
         {
             Assert.IsNotNull(source, nameof(source));
 
@@ -62,7 +65,7 @@ namespace Gile.AutoCAD.Extension
             {
                 try
                 {
-                    item.OpenForWrite();
+                    item.OpenForWrite(tr);
                 }
                 catch (Autodesk.AutoCAD.Runtime.Exception ex)
                 {

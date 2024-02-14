@@ -16,27 +16,33 @@ namespace Gile.AutoCAD.Extension
         /// Gets the effective name of the block reference (name of the DynamicBlockTableRecord for anonymous dynamic blocks).
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <returns>The effective name of the block reference.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        public static string GetEffectiveName(this BlockReference source)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static string GetEffectiveName(this BlockReference source, Transaction tr)
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
 
-            return source.DynamicBlockTableRecord.GetObject<BlockTableRecord>().Name;
+            return ((BlockTableRecord)tr.GetObject(source.DynamicBlockTableRecord, OpenMode.ForRead)).Name;
         }
 
         /// <summary>
         /// Gets all the attributes by tag.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <returns>Sequence of pairs Tag/Attribute.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        public static IEnumerable<KeyValuePair<string, AttributeReference>> GetAttributesByTag(this BlockReference source)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static IEnumerable<KeyValuePair<string, AttributeReference>> GetAttributesByTag(this BlockReference source, Transaction tr)
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
 
             return source
-                .AttributeCollection.GetObjects()
+                .AttributeCollection.GetObjects(tr)
                 .Select(att => new KeyValuePair<string, AttributeReference>(att.Tag, att));
         }
 
@@ -44,14 +50,17 @@ namespace Gile.AutoCAD.Extension
         /// Gets all the attribute values by tag.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <returns>Collection of pairs Tag/Value.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        public static Dictionary<string, string> GetAttributesValues(this BlockReference source)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static Dictionary<string, string> GetAttributesValues(this BlockReference source, Transaction tr)
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
 
             return source
-                .GetAttributesByTag()
+                .GetAttributesByTag(tr)
                 .ToDictionary(p => p.Key, p => p.Value.TextString);
         }
 
@@ -59,19 +68,22 @@ namespace Gile.AutoCAD.Extension
         /// Sets the value to the attribute.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
+        /// <param name="tr">ActiveTransaction.</param>
         /// <param name="tag">Attribute tag.</param>
         /// <param name="value">New value.</param>
         /// <returns>The value if attribute was found, null otherwise.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="ArgumentException">Thrown if <paramref name ="tag"/> is null or empty.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="value"/> is null.</exception>
-        public static string SetAttributeValue(this BlockReference target, string tag, string value)
+        public static string SetAttributeValue(this BlockReference target, Transaction tr, string tag, string value)
         {
             Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNullOrWhiteSpace(tag, nameof(tag));
             Assert.IsNotNull(value, nameof(value));
 
-            foreach (AttributeReference attRef in target.AttributeCollection.GetObjects())
+            foreach (AttributeReference attRef in target.AttributeCollection.GetObjects(tr))
             {
                 if (attRef.Tag == tag)
                 {
@@ -86,16 +98,18 @@ namespace Gile.AutoCAD.Extension
         /// Sets the values to the attributes.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="attribs">Collection of pairs Tag/Value.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="attribs"/> is null.</exception>
-        public static void SetAttributeValues(this BlockReference target, Dictionary<string, string> attribs)
+        public static void SetAttributeValues(this BlockReference target, Transaction tr, Dictionary<string, string> attribs)
         {
             Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNull(attribs, nameof(attribs));
 
-            var tr = target.Database.GetTopTransaction();
-            foreach (AttributeReference attRef in target.AttributeCollection.GetObjects())
+            foreach (AttributeReference attRef in target.AttributeCollection.GetObjects(tr))
             {
                 if (attribs.ContainsKey(attRef.Tag))
                 {
@@ -109,18 +123,20 @@ namespace Gile.AutoCAD.Extension
         /// Adds the attribute references to the block reference and set their values.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="attribValues">Collection of pairs Tag/Value.</param>
         /// <returns>A Dictionary containing the newly created attribute references by tag.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
-        /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
-        public static Dictionary<string, AttributeReference> AddAttributeReferences(this BlockReference target, Dictionary<string, string> attribValues)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static Dictionary<string, AttributeReference> AddAttributeReferences(
+            this BlockReference target, Transaction tr, Dictionary<string, string> attribValues)
         {
             Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
 
-            var tr = target.Database.GetTopTransaction();
             var btr = (BlockTableRecord)tr.GetObject(target.BlockTableRecord, OpenMode.ForRead);
             var attribs = new Dictionary<string, AttributeReference>();
-            foreach (AttributeDefinition attDef in btr.GetObjects<AttributeDefinition>())
+            foreach (AttributeDefinition attDef in btr.GetObjects<AttributeDefinition>(tr))
             {
                 if (!attDef.Constant)
                 {
@@ -142,17 +158,19 @@ namespace Gile.AutoCAD.Extension
         /// Resets the attribute references keeping their values.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="attDefs">Sequence of attribute definitions.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="attDefs"/> is null.</exception>
-        internal static void ResetAttributes(this BlockReference target, IEnumerable<AttributeDefinition> attDefs)
+        internal static void ResetAttributes(this BlockReference target, Transaction tr, IEnumerable<AttributeDefinition> attDefs)
         {
             Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNull(attDefs, nameof(attDefs));
 
-            var tr = target.Database.GetTopTransaction();
             var attValues = new Dictionary<string, string>();
-            foreach (AttributeReference attRef in target.AttributeCollection.GetObjects(OpenMode.ForWrite))
+            foreach (AttributeReference attRef in target.AttributeCollection.GetObjects(tr, OpenMode.ForWrite))
             {
                 attValues.Add(attRef.Tag,
                     attRef.IsMTextAttribute ? attRef.MTextAttribute.Contents : attRef.TextString);
@@ -245,17 +263,19 @@ namespace Gile.AutoCAD.Extension
         /// Mirrors the block reference honoring the value of MIRRTEXT system variable.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="axis">Axis of the mirroring operation.</param>
         /// <param name="eraseSource">Value indicating if the source block reference have to be erased.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="axis"/> is null.</exception>
-        public static void Mirror(this BlockReference source, Line3d axis, bool eraseSource)
+        public static void Mirror(this BlockReference source, Transaction tr, Line3d axis, bool eraseSource)
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNull(axis, nameof(axis));
 
             var db = source.Database;
-            var tr = db.GetTopTransaction();
             BlockReference mirrored;
             if (eraseSource)
             {
