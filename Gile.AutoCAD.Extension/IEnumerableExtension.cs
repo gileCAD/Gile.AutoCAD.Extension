@@ -163,7 +163,7 @@ namespace Gile.AutoCAD.Extension
         public static TSource MaxBy<TSource, TKey>(
             this IEnumerable<TSource> source,
             Func<TSource, TKey> selector,
-            IComparer<TKey> comparer)
+            IComparer<TKey> comparer = null)
         {
             Assert.IsNotNull(source, nameof(source));
             Assert.IsNotNull(selector, nameof(selector));

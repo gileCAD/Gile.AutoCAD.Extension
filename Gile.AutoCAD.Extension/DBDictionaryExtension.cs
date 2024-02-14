@@ -107,7 +107,10 @@ namespace Gile.AutoCAD.Extension
             var tr = parent.Database.GetTopTransaction();
             if (parent.Contains(name))
             {
-                return (DBDictionary)tr.GetObject(parent.GetAt(name), OpenMode.ForRead);
+                var id = parent.GetAt(name);
+                if (id.ObjectClass.IsDerivedFrom(RXObject.GetClass(typeof(DBDictionary))))
+                    throw new System.ArgumentException("Not a DBDictionary", nameof(name));
+                return (DBDictionary)tr.GetObject(id, OpenMode.ForRead);
             }
             parent.OpenForWrite();
             var dict = new DBDictionary();
@@ -120,7 +123,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets the xrecord data.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="key">la clé du xrecord.</param>
+        /// <param name="key">Key of the xrecord, the xrecord.</param>
         /// <returns>The xrecord data or null if the xrecord does not exists.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
@@ -133,7 +136,7 @@ namespace Gile.AutoCAD.Extension
             {
                 return null;
             }
-            var id = (ObjectId)source[key];
+            var id = source.GetAt(key);
             if (!id.TryGetObject(out Xrecord xrec))
             {
                 return null;
@@ -174,7 +177,10 @@ namespace Gile.AutoCAD.Extension
             Xrecord xrec;
             if (target.Contains(key))
             {
-                xrec = (Xrecord)tr.GetObject(target.GetAt(key), OpenMode.ForWrite);
+                var id = target.GetAt(key);
+                if (!id.ObjectClass.IsDerivedFrom(RXObject.GetClass(typeof(Xrecord))))
+                    throw new System.ArgumentException("Not an Xrecord", nameof(key));
+                xrec = (Xrecord)tr.GetObject(id, OpenMode.ForWrite);
             }
             else
             {

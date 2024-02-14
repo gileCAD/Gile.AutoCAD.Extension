@@ -9,7 +9,7 @@ namespace Gile.AutoCAD.Extension
     public static class DBObjectExtension
     {
         /// <summary>
-        /// Tries to get the object extension dictionary
+        /// Tries to get the object extension dictionary.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
         /// <param name="dict">Output dictionary.</param>
@@ -124,8 +124,10 @@ namespace Gile.AutoCAD.Extension
             var regAppTable = (RegAppTable)tr.GetObject(db.RegAppTableId, OpenMode.ForRead);
             if (!regAppTable.Has(appName))
             {
-                var regApp = new RegAppTableRecord();
-                regApp.Name = appName;
+                var regApp = new RegAppTableRecord
+                {
+                    Name = appName
+                };
                 tr.GetObject(db.RegAppTableId, OpenMode.ForWrite);
                 regAppTable.Add(regApp);
                 tr.AddNewlyCreatedDBObject(regApp, true);
