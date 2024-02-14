@@ -47,28 +47,9 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         public void Dispose()
         {
-            if (0 < Count)
-            {
-                Exception last = null;
-                var list = this.ToList();
-                Clear();
-                foreach (T item in list)
-                {
-                    if (item != null)
-                    {
-                        try
-                        {
-                            item.Dispose();
-                        }
-                        catch (Exception ex)
-                        {
-                            last = last ?? ex;
-                        }
-                    }
-                }
-                if (last != null)
-                    throw last;
-            }
+            var list = this.ToList();
+            Clear();
+            list.DisposeAll();
         }
 
         /// <summary>
@@ -78,6 +59,7 @@ namespace Gile.AutoCAD.Extension
         public void AddRange(IEnumerable<T> items)
         {
             Assert.IsNotNull(items, nameof(items));
+
             UnionWith(items);
         }
 
@@ -89,6 +71,7 @@ namespace Gile.AutoCAD.Extension
         public IEnumerable<T> RemoveRange(IEnumerable<T> items)
         {
             Assert.IsNotNull(items, nameof(items));
+
             ExceptWith(items);
             return items;
         }

@@ -15,7 +15,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <param name="mtext">Instance to which the method applies.</param>
         /// <returns>The points (counter-clockwise from lower left).</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="mtext"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="mtext"/> is null.</exception>
         public static Point3d[] GetMTextBoxCorners(this MText mtext)
         {
             Assert.IsNotNull(mtext, nameof(mtext));
@@ -82,18 +82,19 @@ namespace Gile.AutoCAD.Extension
         /// Mirrors the mtext honoring the value of MIRRTEXT system variable.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="axis">Axis of the mirroring operation.</param>
         /// <param name="eraseSource">Value indicating if the source block reference have to be erased.</param>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="axis"/> is null.</exception>
-        public static void Mirror(this MText source, Line3d axis, bool eraseSource)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="axis"/> is null.</exception>
+        public static void Mirror(this MText source, Transaction tr, Line3d axis, bool eraseSource)
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNull(axis, nameof(axis));
 
             var db = source.Database;
-            var tr = db.GetTopTransaction();
-
             MText mirrored;
             if (eraseSource)
             {

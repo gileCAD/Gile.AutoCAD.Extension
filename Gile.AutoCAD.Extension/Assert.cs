@@ -18,7 +18,9 @@ namespace Gile.AutoCAD.Extension
         public static void IsNotNull<T>(T obj, string paramName) where T : class
         {
             if (obj == null)
+            {
                 throw new System.ArgumentNullException(paramName);
+            }
         }
 
         /// <summary>
@@ -29,7 +31,9 @@ namespace Gile.AutoCAD.Extension
         public static void IsNotObjectIdNull(ObjectId id, string paramName)
         {
             if (id.IsNull)
+            {
                 throw new Exception(ErrorStatus.NullObjectId, paramName);
+            }
         }
 
         /// <summary>
@@ -40,7 +44,9 @@ namespace Gile.AutoCAD.Extension
         public static void IsNotNullOrWhiteSpace(string str, string paramName)
         {
             if (string.IsNullOrWhiteSpace(str))
+            {
                 throw new System.ArgumentException("eNullOrWhiteSpace", paramName);
+            }
         }
     }
 }

@@ -16,31 +16,33 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of objects to return.</typeparam>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayers">Value indicating if locked layers should be opened.</param>
         /// <returns>The sequence of opened objects.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static IEnumerable<T> GetObjects<T>(
             this ObjectIdCollection source,
+            Transaction tr,
             OpenMode mode = OpenMode.ForRead,
             bool openErased = false,
             bool forceOpenOnLockedLayers = false)
             where T : DBObject
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
+
             if (0 < source.Count)
             {
-                var tr = source[0].Database.GetTopTransaction();
-
                 var rxClass = RXObject.GetClass(typeof(T));
                 foreach (ObjectId id in source)
                 {
-                    if (id.ObjectClass == rxClass || id.ObjectClass.IsDerivedFrom(rxClass))
+                    if ((id.ObjectClass == rxClass || id.ObjectClass.IsDerivedFrom(rxClass)) &&
+                        (!id.IsErased || openErased))
                     {
-                        if (!id.IsErased || openErased)
-                            yield return (T)tr.GetObject(id, mode, openErased, forceOpenOnLockedLayers);
+                        yield return (T)tr.GetObject(id, mode, openErased, forceOpenOnLockedLayers);
                     }
                 }
             }

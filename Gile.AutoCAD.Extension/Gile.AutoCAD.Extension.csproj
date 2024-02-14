@@ -38,15 +38,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AcCoreMgd">
-      <HintPath>C:\ObjectARX 2017\inc\AcCoreMgd.dll</HintPath>
+      <HintPath>F:\ObjectARX 2015\inc\AcCoreMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcDbMgd">
-      <HintPath>C:\ObjectARX 2017\inc\AcDbMgd.dll</HintPath>
+      <HintPath>F:\ObjectARX 2015\inc\AcDbMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcMgd">
-      <HintPath>C:\ObjectARX 2017\inc\AcMgd.dll</HintPath>
+      <HintPath>F:\ObjectARX 2015\inc\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -73,6 +73,7 @@
     <Compile Include="DisposableList.cs" />
     <Compile Include="DisposableSet.cs" />
     <Compile Include="EditorExtension.cs" />
+    <Compile Include="IDisposableCollection.cs" />
     <Compile Include="IEnumerableExtension.cs" />
     <Compile Include="MTextExtension.cs" />
     <Compile Include="ObjectIdCollectionExtension.cs" />
@@ -80,11 +81,7 @@
     <Compile Include="PolylineExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SymbolTableExtension.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="start.scr">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Compile Include="WorkingDatabase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

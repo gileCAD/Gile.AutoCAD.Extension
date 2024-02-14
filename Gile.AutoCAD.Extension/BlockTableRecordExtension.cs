@@ -17,21 +17,24 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of objects to return.</typeparam>
         /// <param name="btr">Block table record.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayers">Value indicating if locked layers should be opened.</param>
         /// <returns>The sequence of opened objects.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="btr"/> is null.</exception>
-        /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active transaction.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static IEnumerable<T> GetObjects<T>(
           this BlockTableRecord btr,
+          Transaction tr,
           OpenMode mode = OpenMode.ForRead,
           bool openErased = false,
           bool forceOpenOnLockedLayers = false) where T : Entity
         {
             Assert.IsNotNull(btr, nameof(btr));
-            var tr = btr.Database.GetTopTransaction();
-            BlockTableRecord source = openErased ? btr.IncludingErased : btr;
+            Assert.IsNotNull(tr, nameof(tr));
+
+            var source = openErased ? btr.IncludingErased : btr;
             if (typeof(T) == typeof(Entity))
             {
                 foreach (ObjectId id in source)
@@ -56,16 +59,18 @@ namespace Gile.AutoCAD.Extension
         /// Appends the entities to the BlockTableRecord.
         /// </summary>
         /// <param name="owner">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="entities">Sequence of entities.</param>
         /// <returns>The collection of added entities ObjectId.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="owner"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="entities"/> is null.</exception>
-        /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
-        public static ObjectIdCollection Add(this BlockTableRecord owner, IEnumerable<Entity> entities)
+        public static ObjectIdCollection Add(this BlockTableRecord owner, Transaction tr, IEnumerable<Entity> entities)
         {
             Assert.IsNotNull(owner, nameof(owner));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNull(entities, nameof(entities));
-            var tr = owner.Database.GetTopTransaction();
+
             var ids = new ObjectIdCollection();
             using (var ents = new DisposableSet<Entity>(entities))
             {
@@ -82,33 +87,40 @@ namespace Gile.AutoCAD.Extension
         /// Appends the entities to the BlockTableRecord.
         /// </summary>
         /// <param name="owner">Instance to which the method applies.</param>
+        /// <param name="tr">Active transaction</param>
         /// <param name="entities">Collection of entities.</param>
         /// <returns>The collection of added entities ObjectId.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="owner"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="entities"/> is null.</exception>
-        /// <exception cref="Autodesk.AutoCAD.Runtime.Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
-        public static ObjectIdCollection AddRange(this BlockTableRecord owner, params Entity[] entities)
+        public static ObjectIdCollection AddRange(this BlockTableRecord owner, Transaction tr, params Entity[] entities)
         {
-            return owner.Add(entities);
+            Assert.IsNotNull(owner, nameof(owner));
+            Assert.IsNotNull(tr, nameof(tr));
+            Assert.IsNotNull(entities, nameof(entities));
+
+            return owner.Add(tr, entities);
         }
 
         /// <summary>
         /// Appends the entity to the BlockTableRecord.
         /// </summary>
         /// <param name="owner">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="entity">Entity to add.</param>
         /// <returns>The ObjectId of added entity.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="owner"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="entity"/> is null.</exception>
-        /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
-        public static ObjectId Add(this BlockTableRecord owner, Entity entity)
+        public static ObjectId Add(this BlockTableRecord owner, Transaction tr, Entity entity)
         {
             Assert.IsNotNull(owner, nameof(owner));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNull(entity, nameof(entity));
-            var tr = owner.Database.GetTopTransaction();
+
             try
             {
-                ObjectId id = owner.AppendEntity(entity);
+                var id = owner.AppendEntity(entity);
                 tr.AddNewlyCreatedDBObject(entity, true);
                 return id;
             }
@@ -123,6 +135,7 @@ namespace Gile.AutoCAD.Extension
         /// Inserts a block reference.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="blkName">Nlock name.</param>
         /// <param name="insertPoint">Insertion point.</param>
         /// <param name="xScale">X scale factor.</param>
@@ -132,10 +145,11 @@ namespace Gile.AutoCAD.Extension
         /// <param name="attribValues">Collection of key/value pairs (Tag/Value).</param>
         /// <returns>The newly created BlockReference.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="blkName"/> is null or empty.</exception>
-        /// <exception cref="Exception">eNoActiveTransactions is thrown if there is no active Transaction.</exception>
         public static BlockReference InsertBlockReference(
             this BlockTableRecord target,
+            Transaction tr,
             string blkName,
             Point3d insertPoint,
             double xScale = 1.0,
@@ -145,33 +159,25 @@ namespace Gile.AutoCAD.Extension
             Dictionary<string, string> attribValues = null)
         {
             Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNullOrWhiteSpace(blkName, nameof(blkName));
 
             var db = target.Database;
-            var tr = db.GetTopTransaction();
-
             BlockReference br = null;
-            BlockTable bt = db.BlockTableId.GetObject<BlockTable>();
-
-            // Récupérer l'ObjectId du bloc 'blockName' (importé s'il n'était pas présent dans la table des blocs)
-            ObjectId btrId = bt.GetBlock(blkName);
-
-            // si la définition de bloc est bien dans la table des blocs
+            var bt = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+            var btrId = bt.GetBlock(blkName);
             if (btrId != ObjectId.Null)
             {
-                // insertion d'une référence au point donné
                 br = new BlockReference(insertPoint, btrId) { ScaleFactors = new Scale3d(xScale, yScale, zScale), Rotation = rotation };
-                BlockTableRecord btr = btrId.GetObject<BlockTableRecord>();
+                var btr = (BlockTableRecord)tr.GetObject(btrId, OpenMode.ForRead);
                 if (btr.Annotative == AnnotativeStates.True)
                 {
-                    ObjectContextManager ocm = db.ObjectContextManager;
-                    ObjectContextCollection occ = ocm.GetContextCollection("ACDB_ANNOTATIONSCALES");
-                    Autodesk.AutoCAD.Internal.ObjectContexts.AddContext(br, occ.CurrentContext);
+                    var objectContextManager = db.ObjectContextManager;
+                    var objectContextCollection = objectContextManager.GetContextCollection("ACDB_ANNOTATIONSCALES");
+                    Autodesk.AutoCAD.Internal.ObjectContexts.AddContext(br, objectContextCollection.CurrentContext);
                 }
-                target.Add(br);
-
-                // ajout des attributs et affectations de valeurs
-                br.AddAttributeReferences(attribValues);
+                target.Add(tr, br);
+                br.AddAttributeReferences(tr, attribValues);
             }
             return br;
         }
@@ -180,25 +186,28 @@ namespace Gile.AutoCAD.Extension
         /// Synchronizes the attributes of all block references.
         /// </summary>
         /// <param name="target">Instance which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
-        public static void SynchronizeAttributes(this BlockTableRecord target)
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static void SynchronizeAttributes(this BlockTableRecord target, Transaction tr)
         {
             Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
 
-            AttributeDefinition[] attDefs = target.GetObjects<AttributeDefinition>().ToArray();
-            foreach (BlockReference br in target.GetBlockReferenceIds(true, false).GetObjects<BlockReference>(OpenMode.ForWrite))
+            AttributeDefinition[] attDefs = target.GetObjects<AttributeDefinition>(tr).ToArray();
+            foreach (BlockReference br in target.GetBlockReferenceIds(true, false).GetObjects<BlockReference>(tr, OpenMode.ForWrite))
             {
-                br.ResetAttributes(attDefs);
+                br.ResetAttributes(tr, attDefs);
             }
             if (target.IsDynamicBlock)
             {
                 target.UpdateAnonymousBlocks();
-                foreach (BlockTableRecord btr in target.GetAnonymousBlockIds().GetObjects<BlockTableRecord>())
+                foreach (BlockTableRecord btr in target.GetAnonymousBlockIds().GetObjects<BlockTableRecord>(tr))
                 {
-                    attDefs = btr.GetObjects<AttributeDefinition>().ToArray();
-                    foreach (BlockReference br in btr.GetBlockReferenceIds(true, false).GetObjects<BlockReference>(OpenMode.ForWrite))
+                    attDefs = btr.GetObjects<AttributeDefinition>(tr).ToArray();
+                    foreach (BlockReference br in btr.GetBlockReferenceIds(true, false).GetObjects<BlockReference>(tr, OpenMode.ForWrite))
                     {
-                        br.ResetAttributes(attDefs);
+                        br.ResetAttributes(tr, attDefs);
                     }
                 }
             }

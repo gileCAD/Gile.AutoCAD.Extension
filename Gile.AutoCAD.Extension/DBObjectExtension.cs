@@ -9,116 +9,149 @@ namespace Gile.AutoCAD.Extension
     public static class DBObjectExtension
     {
         /// <summary>
-        /// Tries to get the object extension dictionary
+        /// Tries to get the object extension dictionary.
         /// </summary>
-        /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="dict">Output dictionary.</param>
+        /// <param name="dbObject">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="dictionary">Output dictionary.</param>
         /// <param name="mode">Open mode to obtain in.</param>
+        /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns><c>true</c>, if the operation succeeded; <c>false</c>, otherwise.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        public static bool TryGetExtensionDictionary(this DBObject source, out DBDictionary dict, OpenMode mode = OpenMode.ForRead)
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dbObject"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static bool TryGetExtensionDictionary(
+            this DBObject dbObject,
+            Transaction tr,
+            out DBDictionary dictionary,
+            OpenMode mode = OpenMode.ForRead,
+            bool openErased = false)
         {
-            Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(dbObject, nameof(dbObject));
+            Assert.IsNotNull(tr, nameof(tr));
 
-            dict = null;
-            var dictId = source.ExtensionDictionary;
-            if (dictId == ObjectId.Null)
-            {
+            dictionary = default;
+            var id = dbObject.ExtensionDictionary;
+            if (id.IsNull)
                 return false;
-            }
-            dict = dictId.GetObject<DBDictionary>(mode);
+            dictionary = (DBDictionary)tr.GetObject(id, mode, openErased);
             return true;
         }
 
         /// <summary>
         /// Gets or creates the extension dictionary.
         /// </summary>
-        /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="dbObject">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The extension dictionary.</returns>
-        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
-        public static DBDictionary GetOrCreateExtensionDictionary(this DBObject source)
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dbObject"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static DBDictionary GetOrCreateExtensionDictionary(
+            this DBObject dbObject,
+            Transaction tr,
+            OpenMode mode = OpenMode.ForRead)
         {
-            Assert.IsNotNull(source, nameof(source));
-            if (source.ExtensionDictionary == ObjectId.Null)
+            Assert.IsNotNull(dbObject, nameof(dbObject));
+            Assert.IsNotNull(tr, nameof(tr));
+
+            if (dbObject.ExtensionDictionary.IsNull)
             {
-                source.OpenForWrite();
-                source.CreateExtensionDictionary();
+                dbObject.OpenForWrite(tr);
+                dbObject.CreateExtensionDictionary();
             }
-            return source.ExtensionDictionary.GetObject<DBDictionary>();
+            return (DBDictionary)tr.GetObject(dbObject.ExtensionDictionary, mode);
         }
 
         /// <summary>
-        /// Gets the xrecord data of the extension dictionary of the object.
+        /// Tries to get the xrecord data of the extension dictionary of the object.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="key">Xrecord key.</param>
+        /// <param name="data">Output data.</param>
         /// <returns>The xrecord data or null if the xrecord does not exists.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
-        public static ResultBuffer GetXDictionaryXrecordData(this DBObject source, string key)
+        public static bool GetXDictionaryXrecordData(this DBObject source, Transaction tr, string key, out ResultBuffer data)
         {
             Assert.IsNotNull(source, nameof(source));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNullOrWhiteSpace(key, nameof(key));
-            if (!source.TryGetExtensionDictionary(out DBDictionary xdict))
-            {
-                return null;
-            }
-            return xdict.GetXrecordData(key);
+
+            data = default;
+            return
+                source.TryGetExtensionDictionary(tr, out DBDictionary xdict) &&
+                xdict.TryGetXrecordData(tr, key, out data);
         }
 
         /// <summary>
         /// Sets the xrecord data of the extension dictionary of the object.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="key">The xrecord key.</param>
         /// <param name="values">The new xrecord data.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
-        public static void SetXDictionaryXrecordData(this DBObject target, string key, params TypedValue[] values)
+        public static void SetXDictionaryXrecordData(this DBObject target, Transaction tr, string key, params TypedValue[] values)
         {
-            target.SetXDictionaryXrecordData(key, new ResultBuffer(values));
+            Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
+            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+
+            target.SetXDictionaryXrecordData(tr, key, new ResultBuffer(values));
         }
 
         /// <summary>
         /// Sets the xrecord data of the extension dictionary of the object.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="key">The xrecord key.</param>
         /// <param name="data">The new xrecord data.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
-        public static void SetXDictionaryXrecordData(this DBObject target, string key, ResultBuffer data)
+        public static void SetXDictionaryXrecordData(this DBObject target, Transaction tr, string key, ResultBuffer data)
         {
             Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNullOrWhiteSpace(key, nameof(key));
-            target.GetOrCreateExtensionDictionary().SetXrecordData(key, data);
+
+            target.GetOrCreateExtensionDictionary(tr).SetXrecordData(tr, key, data);
         }
 
         /// <summary>
         /// Sets the object extended data (xdata) for the application.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <param name="data">Extended data (the first TypedValue must be: (1001, &lt;regAppName&gt;)).</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="data"/> is null.</exception>
-        /// <exception cref="Exception">eNoActiveTransactions is thrown if there's no active transaction.</exception>
         /// <exception cref="Exception">eBadDxfSequence is thrown if the result buffer is not valid.</exception>
-        public static void SetXDataForApplication(this DBObject target, ResultBuffer data)
+        public static void SetXDataForApplication(this DBObject target, Transaction tr, ResultBuffer data)
         {
             Assert.IsNotNull(target, nameof(target));
+            Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNull(data, nameof(data));
-            Database db = target.Database;
-            Transaction tr = db.GetTopTransaction();
+
+            var db = target.Database;
             var typedValue = data.AsArray()[0];
             if (typedValue.TypeCode != 1001)
                 throw new Exception(ErrorStatus.BadDxfSequence);
             string appName = (string)typedValue.Value;
-            RegAppTable regAppTable = db.RegAppTableId.GetObject<RegAppTable>();
+            var regAppTable = (RegAppTable)tr.GetObject(db.RegAppTableId, OpenMode.ForRead);
             if (!regAppTable.Has(appName))
             {
-                var regApp = new RegAppTableRecord();
-                regApp.Name = appName;
-                regAppTable.OpenForWrite();
+                var regApp = new RegAppTableRecord
+                {
+                    Name = appName
+                };
+                tr.GetObject(db.RegAppTableId, OpenMode.ForWrite);
                 regAppTable.Add(regApp);
                 tr.AddNewlyCreatedDBObject(regApp, true);
             }
@@ -129,14 +162,18 @@ namespace Gile.AutoCAD.Extension
         /// Opens the object for write.
         /// </summary>
         /// <param name="dbObj">Instance to which the method applies.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dbObj"/> is null.</exception>
-        /// <exception cref="Exception">eNoActiveTransactions is thrown if there's no active transaction.</exception>
-        public static void OpenForWrite(this DBObject dbObj)
+        /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
+        public static void OpenForWrite(this DBObject dbObj, Transaction tr)
         {
             Assert.IsNotNull(dbObj, nameof(dbObj));
+            Assert.IsNotNull(tr, nameof(tr));
 
             if (!dbObj.IsWriteEnabled)
-                dbObj.Database.GetTopTransaction().GetObject(dbObj.ObjectId, OpenMode.ForWrite);
+            {
+                tr.GetObject(dbObj.ObjectId, OpenMode.ForWrite);
+            }
         }
     }
 }

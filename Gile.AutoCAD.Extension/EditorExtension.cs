@@ -24,6 +24,7 @@ namespace Gile.AutoCAD.Extension
         public static void Zoom(this Editor ed, Extents3d ext)
         {
             Assert.IsNotNull(ed, nameof(ed));
+
             using (ViewTableRecord view = ed.GetCurrentView())
             {
                 ext.TransformBy(view.WorldToEye());
@@ -43,6 +44,8 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="ed"/> is null.</exception>
         public static void ZoomExtents(this Editor ed)
         {
+            Assert.IsNotNull(ed, nameof(ed));
+
             Database db = ed.Document.Database;
             db.UpdateExt(false);
             Extents3d ext = (short)Application.GetSystemVariable("cvport") == 1 ?
@@ -60,10 +63,12 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="ed"/> is null.</exception>
         public static void ZoomWindow(this Editor ed, Point3d p1, Point3d p2)
         {
-            using (var line = new Line(p1, p2))
-            {
-                ed.Zoom(line.GeometricExtents);
-            }
+            Assert.IsNotNull(ed, nameof(ed));
+
+            var extents = new Extents3d();
+            extents.AddPoint(p1);
+            extents.AddPoint(p2);
+            ed.Zoom(extents);
         }
 
         /// <summary>
@@ -76,14 +81,11 @@ namespace Gile.AutoCAD.Extension
         {
             Assert.IsNotNull(ed, nameof(ed));
             Assert.IsNotNull(ids, nameof(ids));
-            using (Transaction tr = ed.Document.TransactionManager.StartTransaction())
+
+            using (Transaction tr = ed.Document.TransactionManager.StartOpenCloseTransaction())
             {
-                //Extents3d ext = ids
-                //    .GetObjects<Entity>()
-                //    .Select(ent => ent.GeometricExtents)
-                //    .Aggregate((e1, e2) => { e1.AddExtents(e2); return e1; });
                 Extents3d ext = ids
-                    .GetObjects<Entity>()
+                    .GetObjects<Entity>(tr)
                     .Select(ent => ent.Bounds)
                     .Where(b => b.HasValue)
                     .Select(b => b.Value)
@@ -102,6 +104,7 @@ namespace Gile.AutoCAD.Extension
         public static void ZoomScale(this Editor ed, double scale)
         {
             Assert.IsNotNull(ed, nameof(ed));
+
             using (ViewTableRecord view = ed.GetCurrentView())
             {
                 view.Width /= scale;
@@ -120,6 +123,7 @@ namespace Gile.AutoCAD.Extension
         public static void ZoomCenter(this Editor ed, Point3d center, double scale = 1.0)
         {
             Assert.IsNotNull(ed, nameof(ed));
+
             using (ViewTableRecord view = ed.GetCurrentView())
             {
                 center = center.TransformBy(view.WorldToEye());
@@ -145,7 +149,7 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="ed"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
         public static PromptSelectionResult GetSelection(this Editor ed, PromptSelectionOptions options, SelectionFilter filter, System.Predicate<ObjectId> predicate) =>
-            ed.GetPredicatedSelection(predicate, options, filter);
+            GetPredicatedSelection(ed, predicate, options, filter);
 
         /// <summary>
         /// Gets a selection set using the supplied prompt selection options and the supplied predicate.
@@ -157,7 +161,7 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="ed"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
         public static PromptSelectionResult GetSelection(this Editor ed, PromptSelectionOptions options, System.Predicate<ObjectId> predicate) =>
-            ed.GetPredicatedSelection(predicate, options);
+            GetPredicatedSelection(ed, predicate, options);
 
         /// <summary>
         /// Gets a selection set using the supplied filter and the supplied predicate.
@@ -169,7 +173,7 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="ed"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
         public static PromptSelectionResult GetSelection(this Editor ed, SelectionFilter filter, System.Predicate<ObjectId> predicate) =>
-            ed.GetPredicatedSelection(predicate, null, filter);
+            GetPredicatedSelection(ed, predicate, null, filter);
 
         /// <summary>
         /// Gets a selection set using the supplied predicate.
@@ -180,10 +184,10 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="ed"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
         public static PromptSelectionResult GetSelection(this Editor ed, System.Predicate<ObjectId> predicate) =>
-            ed.GetPredicatedSelection(predicate, null, null);
+            GetPredicatedSelection(ed, predicate, null, null);
 
         private static PromptSelectionResult GetPredicatedSelection(
-            this Editor ed,
+            Editor ed,
             System.Predicate<ObjectId> predicate,
             PromptSelectionOptions options = null,
             SelectionFilter filter = null)
@@ -197,7 +201,9 @@ namespace Gile.AutoCAD.Extension
                 for (int i = 0; i < ids.Length; i++)
                 {
                     if (!predicate(ids[i]))
+                    {
                         e.Remove(i);
+                    }
                 }
             }
 
@@ -206,16 +212,24 @@ namespace Gile.AutoCAD.Extension
             if (options == null)
             {
                 if (filter == null)
+                {
                     result = ed.GetSelection();
+                }
                 else
+                {
                     result = ed.GetSelection(filter);
+                }
             }
             else
             {
                 if (filter == null)
+                {
                     result = ed.GetSelection(options);
+                }
                 else
+                {
                     result = ed.GetSelection(options, filter);
+                }
             }
             ed.SelectionAdded -= onSelectionAdded;
             return result;
