@@ -73,7 +73,7 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
-        public static bool GetXDictionaryXrecordData(this DBObject source, Transaction tr, string key, out ResultBuffer data)
+        public static bool TryGetXDictionaryXrecordData(this DBObject source, Transaction tr, string key, out ResultBuffer data)
         {
             Assert.IsNotNull(source, nameof(source));
             Assert.IsNotNull(tr, nameof(tr));
