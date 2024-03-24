@@ -16,7 +16,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets the effective name of the block reference (name of the DynamicBlockTableRecord for anonymous dynamic blocks).
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <returns>The effective name of the block reference.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
@@ -32,7 +32,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets all the attributes by tag.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <returns>Sequence of pairs Tag/Attribute.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
@@ -50,7 +50,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets all the attribute values by tag.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <returns>Collection of pairs Tag/Value.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
@@ -98,7 +98,7 @@ namespace Gile.AutoCAD.Extension
         /// Sets the values to the attributes.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="attribs">Collection of pairs Tag/Value.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
@@ -123,7 +123,7 @@ namespace Gile.AutoCAD.Extension
         /// Adds the attribute references to the block reference and set their values.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="attribValues">Collection of pairs Tag/Value.</param>
         /// <returns>A Dictionary containing the newly created attribute references by tag.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
@@ -158,7 +158,7 @@ namespace Gile.AutoCAD.Extension
         /// Resets the attribute references keeping their values.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="attDefs">Sequence of attribute definitions.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
@@ -263,7 +263,7 @@ namespace Gile.AutoCAD.Extension
         /// Mirrors the block reference honoring the value of MIRRTEXT system variable.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="axis">Axis of the mirroring operation.</param>
         /// <param name="eraseSource">Value indicating if the source block reference have to be erased.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>

@@ -15,7 +15,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of the returned object.</typeparam>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the entry in the dictionary.</param>
         /// <param name="obj">Output object.</param>
         /// <param name="mode">Open mode to obtain in.</param>
@@ -44,7 +44,7 @@ namespace Gile.AutoCAD.Extension
         /// Tries to get the named dictionary.
         /// </summary>
         /// <param name="parent">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Name of the dictionary.</param>
         /// <param name="dictionary">Output dictionary.</param>
         /// <param name="mode">Open mode to obtain in.</param>
@@ -83,7 +83,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of returned objects.</typeparam>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns>The sequence of collected objects.</returns>
@@ -113,7 +113,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets or creates the named dictionary.
         /// </summary>
         /// <param name="parent">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="name">Name of the dictionary.</param>
         /// <returns>The found or newly created dictionary.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="parent"/> is null.</exception>
@@ -150,7 +150,7 @@ namespace Gile.AutoCAD.Extension
         /// Tries to get the xrecord data.
         /// </summary>
         /// <param name="dictionary">Instance to which the method applies.</param>
-        /// <param name="tr">Active transaction</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the xrecord.</param>
         /// <param name="data">Output data.</param>
         /// <returns><c>true</c>, if the operation succeeded; <c>false</c>, otherwise.</returns>
@@ -185,7 +185,7 @@ namespace Gile.AutoCAD.Extension
         /// Sets the xrecord data.
         /// </summary>
         /// <param name="dictionary">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it does not already exist.</param>
         /// <param name="data">Data</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dictionary"/> is null.</exception>
@@ -205,7 +205,7 @@ namespace Gile.AutoCAD.Extension
         /// Sets the xrecord data.
         /// </summary>
         /// <param name="dictionary">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it does not already exist.</param>
         /// <param name="data">Data</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dictionary"/> is null.</exception>

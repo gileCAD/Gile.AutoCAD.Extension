@@ -73,6 +73,7 @@
     <Compile Include="DisposableList.cs" />
     <Compile Include="DisposableSet.cs" />
     <Compile Include="EditorExtension.cs" />
+    <Compile Include="EntityExtension.cs" />
     <Compile Include="IDisposableCollection.cs" />
     <Compile Include="IEnumerableExtension.cs" />
     <Compile Include="MTextExtension.cs" />
