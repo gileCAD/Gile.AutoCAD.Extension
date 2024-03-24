@@ -15,7 +15,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of the output object.</typeparam>
         /// <param name="id">ObjectId to open.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="obj">Output object.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
@@ -49,7 +49,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of the object to return.</typeparam>
         /// <param name="id">ObjectId to open.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayer">Value indicating if locked layers should be opened.</param>
