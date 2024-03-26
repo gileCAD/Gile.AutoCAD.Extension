@@ -48,8 +48,8 @@ public void EraseShortLines(double minLength)
 }
 ```
 
-Reference this assembly in AutoCAD .NET projects setting the Copy Locale property to True.
+Reference one of these assemblies in AutoCAD .NET projects setting the Copy Locale property to True.
 
-Download the [assembly](https://gilecad.azurewebsites.net/Resources/Gile.AutoCAD.Extension.zip) (Gile.AutoCAD.Extension.dll for AutoCAD 2015 to 2024).
+Download the [assemblies](https://gilecad.azurewebsites.net/Resources/Gile.AutoCAD.Extension.zip) (Gile.AutoCAD.R20.Extension.dll for AutoCAD 2015 to 2024 or Gile.AutoCAD.R25.Extension.dll for AutoCAD 2025+).
 
 See the [documentation](https://gilecad.azurewebsites.net/Resources/AcadExtensionHelp/index.html).
