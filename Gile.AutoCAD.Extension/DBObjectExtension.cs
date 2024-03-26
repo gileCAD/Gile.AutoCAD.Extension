@@ -12,7 +12,7 @@ namespace Gile.AutoCAD.Extension
         /// Tries to get the object extension dictionary.
         /// </summary>
         /// <param name="dbObject">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="dictionary">Output dictionary.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
@@ -41,7 +41,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets or creates the extension dictionary.
         /// </summary>
         /// <param name="dbObject">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The extension dictionary.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dbObject"/> is null.</exception>
@@ -66,7 +66,7 @@ namespace Gile.AutoCAD.Extension
         /// Tries to get the xrecord data of the extension dictionary of the object.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Xrecord key.</param>
         /// <param name="data">Output data.</param>
         /// <returns>The xrecord data or null if the xrecord does not exists.</returns>
@@ -89,7 +89,7 @@ namespace Gile.AutoCAD.Extension
         /// Sets the xrecord data of the extension dictionary of the object.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">The xrecord key.</param>
         /// <param name="values">The new xrecord data.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
@@ -108,7 +108,7 @@ namespace Gile.AutoCAD.Extension
         /// Sets the xrecord data of the extension dictionary of the object.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">The xrecord key.</param>
         /// <param name="data">The new xrecord data.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
@@ -127,7 +127,7 @@ namespace Gile.AutoCAD.Extension
         /// Sets the object extended data (xdata) for the application.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="data">Extended data (the first TypedValue must be: (1001, &lt;regAppName&gt;)).</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
@@ -162,7 +162,7 @@ namespace Gile.AutoCAD.Extension
         /// Opens the object for write.
         /// </summary>
         /// <param name="dbObj">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dbObj"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static void OpenForWrite(this DBObject dbObj, Transaction tr)

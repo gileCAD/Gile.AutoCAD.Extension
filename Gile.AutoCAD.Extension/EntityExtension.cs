@@ -20,6 +20,7 @@ namespace Gile.AutoCAD.Extension
             Assert.IsNotNull(entity, nameof(entity));
             Assert.IsNotNull(entity, nameof(tr));
 
+
             var owner = tr.GetObject(entity.OwnerId, OpenMode.ForRead);
             return owner is BlockTableRecord btr && btr.IsLayout;
         }

@@ -9,7 +9,7 @@ Example with a method to erase lines in model space which are smaller than a giv
 public void EraseShortLines(double minLength)
 {
     var db = Application.DocumentManager.MdiActiveDocument.Database;
-    using (var tr = db.TransactionManager.StartTransaction())
+    using (var tr = db.TransactionManager.StartOpenCloseTransaction())
     {
         var blockTable = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
         var modelSpace = (BlockTableRecord)tr.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForRead);
@@ -36,12 +36,12 @@ The same method can be written:
 public void EraseShortLines(double minLength)
 {
     var db = Active.Database;
-    using (var tr = db.TransactionManager.StartTransaction())
+    using (var tr = db.TransactionManager.StartOpenCloseTransaction())
     {
-        db.GetModelSpace()
-            .GetObjects<Line>()
+        db.GetModelSpace(tr)
+            .GetObjects<Line>(tr)
             .Where(line => line.Length < minLength)
-            .UpgradeOpen()
+            .UpgradeOpen(tr)
             .ForEach(line => line.Erase());
         tr.Commit();
     }
@@ -50,6 +50,6 @@ public void EraseShortLines(double minLength)
 
 Reference this assembly in AutoCAD .NET projects setting the Copy Locale property to True.
 
-Download the [assembly](https://gilecad.azurewebsites.net/Resources/Gile.AutoCAD.Extension.zip) (Gile.AutoCAD.Extension.dll for AutoCAD 2015 an later).
+Download the [assembly](https://gilecad.azurewebsites.net/Resources/Gile.AutoCAD.Extension.zip) (Gile.AutoCAD.Extension.dll for AutoCAD 2015 to 2024).
 
 See the [documentation](https://gilecad.azurewebsites.net/Resources/AcadExtensionHelp/index.html).
