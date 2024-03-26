@@ -19,7 +19,7 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         public static ObjectId EntLast(this Database db)
         {
-            Assert.IsNotNull(db, nameof(db));
+            System.ArgumentNullException.ThrowIfNull(db);
 
             var seed = db.Handseed.Value;
             var entityClass = RXObject.GetClass(typeof(Entity));
@@ -47,15 +47,15 @@ namespace Gile.AutoCAD.Extension
         /// Gets the named object dictionary.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The named object dictionary.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static DBDictionary GetNOD(this Database db, Transaction tr, OpenMode mode = OpenMode.ForRead)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNull(tr, nameof(tr));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentNullException.ThrowIfNull(tr);
 
             return (DBDictionary)tr.GetObject(db.NamedObjectsDictionaryId, mode);
         }
@@ -64,15 +64,15 @@ namespace Gile.AutoCAD.Extension
         /// Gets the model space block table record.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The model space.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static BlockTableRecord GetModelSpace(this Database db, Transaction tr, OpenMode mode = OpenMode.ForRead)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNull(tr, nameof(tr));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentNullException.ThrowIfNull(tr);
 
             return (BlockTableRecord)tr.GetObject(SymbolUtilityServices.GetBlockModelSpaceId(db), mode);
         }
@@ -81,15 +81,15 @@ namespace Gile.AutoCAD.Extension
         /// Gets the current space block table record.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The current space.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static BlockTableRecord GetCurrentSpace(this Database db, Transaction tr, OpenMode mode = OpenMode.ForRead)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNull(tr, nameof(tr));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentNullException.ThrowIfNull(tr);
 
             return (BlockTableRecord)tr.GetObject(db.CurrentSpaceId, mode);
         }
@@ -98,7 +98,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets the block table record of each layout.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="exceptModel">Value indicating if the model space layout is left out.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The sequence of block table records.</returns>
@@ -106,8 +106,8 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static IEnumerable<BlockTableRecord> GetLayoutBlockTableRecords(this Database db, Transaction tr, bool exceptModel = true, OpenMode mode = OpenMode.ForRead)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNull(tr, nameof(tr));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentNullException.ThrowIfNull(tr);
 
             return db.GetLayouts(tr, exceptModel).Select(l => (BlockTableRecord)tr.GetObject(l.BlockTableRecordId, mode));
         }
@@ -116,7 +116,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets the layouts.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="exceptModel">Value indicating if the model space layout is left out.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
@@ -125,8 +125,8 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static IEnumerable<Layout> GetLayouts(this Database db, Transaction tr, bool exceptModel = true, OpenMode mode = OpenMode.ForRead, bool openErased = false)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNull(tr, nameof(tr));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentNullException.ThrowIfNull(tr);
 
             var layouts = (DBDictionary)tr.GetObject(db.LayoutDictionaryId, OpenMode.ForRead);
             foreach (DBDictionaryEntry entry in layouts)
@@ -142,14 +142,14 @@ namespace Gile.AutoCAD.Extension
         /// Gets the layouts names.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <returns>The sequence of layout names.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static IEnumerable<string> GetLayoutNames(this Database db, Transaction tr)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNull(tr, nameof(tr));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentNullException.ThrowIfNull(tr);
 
             return db.GetLayouts(tr).OrderBy(l => l.TabOrder).Select(l => l.LayoutName);
         }
@@ -162,16 +162,16 @@ namespace Gile.AutoCAD.Extension
         /// <returns>The value of the custom property; or null, if it does not exist.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
-        public static string GetCustomProperty(this Database db, string key)
+        public static string? GetCustomProperty(this Database db, string key)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
             var summaryInfoBuilder = new DatabaseSummaryInfoBuilder(db.SummaryInfo);
             var customProperties = summaryInfoBuilder.CustomPropertyTable;
             if (customProperties[key] is null)
                 return null;
-            return ((string)customProperties[key]).Trim();
+            return ((string)customProperties[key]!).Trim();
         }
 
         /// <summary>
@@ -182,14 +182,14 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         public static Dictionary<string, string> GetCustomProperties(this Database db)
         {
-            Assert.IsNotNull(db, nameof(db));
+            System.ArgumentNullException.ThrowIfNull(db);
 
             var result = new Dictionary<string, string>();
             var customPropertie = db.SummaryInfo.CustomProperties;
             while (customPropertie.MoveNext())
             {
                 var entry = customPropertie.Entry;
-                result.Add((string)entry.Key, ((string)entry.Value).Trim());
+                result.Add((string)entry.Key, ((string)entry.Value!).Trim());
             }
             return result;
         }
@@ -204,8 +204,8 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         public static void SetCustomProperty(this Database db, string key, string value)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
             var summaryInfoBuilder = new DatabaseSummaryInfoBuilder(db.SummaryInfo);
             var customProperties = summaryInfoBuilder.CustomPropertyTable;
@@ -229,8 +229,8 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="values"/> is null.</exception>
         public static void SetCustomProperties(this Database db, params KeyValuePair<string, string>[] values)
         {
-            Assert.IsNotNull(db, nameof(db));
-            Assert.IsNotNull(values, nameof(values));
+            System.ArgumentNullException.ThrowIfNull(db);
+            System.ArgumentNullException.ThrowIfNull(values);
 
             var summaryInfoBuilder = new DatabaseSummaryInfoBuilder(db.SummaryInfo);
             var customProperties = summaryInfoBuilder.CustomPropertyTable;

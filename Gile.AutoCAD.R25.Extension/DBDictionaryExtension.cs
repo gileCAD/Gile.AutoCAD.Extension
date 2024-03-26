@@ -15,7 +15,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of the returned object.</typeparam>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the entry in the dictionary.</param>
         /// <param name="obj">Output object.</param>
         /// <param name="mode">Open mode to obtain in.</param>
@@ -28,13 +28,13 @@ namespace Gile.AutoCAD.Extension
             this DBDictionary source,
             Transaction tr,
             string key,
-            out T obj,
+            out T? obj,
             OpenMode mode = OpenMode.ForRead,
             bool openErased = false) where T : DBObject
         {
-            Assert.IsNotNull(source, nameof(source));
-            Assert.IsNotNull(tr, nameof(tr));
-            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+            System.ArgumentNullException.ThrowIfNull(source);
+            System.ArgumentNullException.ThrowIfNull(tr);
+            System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
             obj = default;
             return source.Contains(key) && source.GetAt(key).TryGetObject(tr, out obj, mode, openErased);
@@ -44,7 +44,7 @@ namespace Gile.AutoCAD.Extension
         /// Tries to get the named dictionary.
         /// </summary>
         /// <param name="parent">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Name of the dictionary.</param>
         /// <param name="dictionary">Output dictionary.</param>
         /// <param name="mode">Open mode to obtain in.</param>
@@ -57,13 +57,13 @@ namespace Gile.AutoCAD.Extension
             this DBDictionary parent,
             Transaction tr,
             string key,
-            out DBDictionary dictionary,
+            out DBDictionary? dictionary,
             OpenMode mode = OpenMode.ForRead,
             bool openErased = false)
         {
-            Assert.IsNotNull(parent, nameof(parent));
-            Assert.IsNotNull(tr, nameof(tr));
-            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+            System.ArgumentNullException.ThrowIfNull(parent);
+            System.ArgumentNullException.ThrowIfNull(tr);
+            System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
             dictionary = default;
             if (parent.Contains(key))
@@ -83,7 +83,7 @@ namespace Gile.AutoCAD.Extension
         /// </summary>
         /// <typeparam name="T">Type of returned objects.</typeparam>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <returns>The sequence of collected objects.</returns>
@@ -96,8 +96,8 @@ namespace Gile.AutoCAD.Extension
             bool openErased = false)
             where T : DBObject
         {
-            Assert.IsNotNull(source, nameof(source));
-            Assert.IsNotNull(tr, nameof(tr));
+            System.ArgumentNullException.ThrowIfNull(source);
+            System.ArgumentNullException.ThrowIfNull(tr);
 
             var rxc = RXObject.GetClass(typeof(T));
             foreach (DBDictionaryEntry entry in openErased ? source.IncludingErased : source)
@@ -113,7 +113,7 @@ namespace Gile.AutoCAD.Extension
         /// Gets or creates the named dictionary.
         /// </summary>
         /// <param name="parent">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="name">Name of the dictionary.</param>
         /// <returns>The found or newly created dictionary.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="parent"/> is null.</exception>
@@ -125,9 +125,9 @@ namespace Gile.AutoCAD.Extension
             Transaction tr,
             string name)
         {
-            Assert.IsNotNull(parent, nameof(parent));
-            Assert.IsNotNull(tr, nameof(tr));
-            Assert.IsNotNullOrWhiteSpace(name, nameof(name));
+            System.ArgumentNullException.ThrowIfNull(parent);
+            System.ArgumentNullException.ThrowIfNull(tr);
+            System.ArgumentException.ThrowIfNullOrWhiteSpace(name);
 
             if (parent.Contains(name))
             {
@@ -161,11 +161,11 @@ namespace Gile.AutoCAD.Extension
             this DBDictionary dictionary,
             Transaction tr,
             string key,
-            out ResultBuffer data)
+            out ResultBuffer? data)
         {
-            Assert.IsNotNull(dictionary, nameof(dictionary));
-            Assert.IsNotNull(tr, nameof(tr));
-            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+            System.ArgumentNullException.ThrowIfNull(dictionary);
+            System.ArgumentNullException.ThrowIfNull(tr);
+            System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
             data = default;
             if (dictionary.Contains(key))
@@ -185,7 +185,7 @@ namespace Gile.AutoCAD.Extension
         /// Sets the xrecord data.
         /// </summary>
         /// <param name="dictionary">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it does not already exist.</param>
         /// <param name="data">Data</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dictionary"/> is null.</exception>
@@ -194,9 +194,9 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="data"/> is null.</exception>
         public static void SetXrecordData(this DBDictionary dictionary, Transaction tr, string key, params TypedValue[] data)
         {
-            Assert.IsNotNull(dictionary, nameof(dictionary));
-            Assert.IsNotNull(tr, nameof(tr));
-            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
+            System.ArgumentNullException.ThrowIfNull(dictionary);
+            System.ArgumentNullException.ThrowIfNull(tr);
+            System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
             dictionary.SetXrecordData(tr, key, new ResultBuffer(data));
         }
@@ -205,7 +205,7 @@ namespace Gile.AutoCAD.Extension
         /// Sets the xrecord data.
         /// </summary>
         /// <param name="dictionary">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it does not already exist.</param>
         /// <param name="data">Data</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dictionary"/> is null.</exception>
@@ -214,10 +214,10 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="data"/> is null.</exception>
         public static void SetXrecordData(this DBDictionary dictionary, Transaction tr, string key, ResultBuffer data)
         {
-            Assert.IsNotNull(dictionary, nameof(dictionary));
-            Assert.IsNotNull(tr, nameof(tr));
-            Assert.IsNotNullOrWhiteSpace(key, nameof(key));
-            Assert.IsNotNull(data, nameof(data));
+            System.ArgumentNullException.ThrowIfNull(dictionary);
+            System.ArgumentNullException.ThrowIfNull(tr);
+            System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
+            System.ArgumentNullException.ThrowIfNull(data);
             Xrecord xrecord;
             if (dictionary.Contains(key))
             {
