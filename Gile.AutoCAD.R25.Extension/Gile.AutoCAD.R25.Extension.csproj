@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<OutputType>Library</OutputType>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<AssemblyTitle>Gile.AutoCAD.Extension</AssemblyTitle>
+		<Company>gileCAD</Company>
+		<Product>Gile.AutoCAD.Extension</Product>
+		<Copyright>Copyright © Gilles Chanteau 2017</Copyright>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+		<FileVersion>2.0.0.0</FileVersion>
+		<PlatformTarget>x64</PlatformTarget>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<RootNamespace>Gile.AutoCAD.Extension</RootNamespace>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DocumentationFile>bin\Release\Gile.AutoCAD.Extension.xml</DocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="AcCoreMgd">
+			<HintPath>F:\ObjectARX 2025\inc\AcCoreMgd.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="AcDbMgd">
+			<HintPath>F:\ObjectARX 2025\inc\AcDbMgd.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="AcMgd">
+			<HintPath>F:\ObjectARX 2025\inc\AcMgd.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+	</ItemGroup>
+</Project>

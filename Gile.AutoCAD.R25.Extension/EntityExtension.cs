@@ -17,9 +17,8 @@ namespace Gile.AutoCAD.Extension
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static bool IsOwnedByLayout(this Entity entity, Transaction tr)
         {
-            Assert.IsNotNull(entity, nameof(entity));
-            Assert.IsNotNull(entity, nameof(tr));
-
+            System.ArgumentNullException.ThrowIfNull(entity);
+            System.ArgumentNullException.ThrowIfNull(tr);
 
             var owner = tr.GetObject(entity.OwnerId, OpenMode.ForRead);
             return owner is BlockTableRecord btr && btr.IsLayout;
