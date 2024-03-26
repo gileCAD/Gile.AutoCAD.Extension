@@ -1,6 +1,6 @@
 # Gile.AutoCAD.Extension
 ### AutoCAD Helpers Class Library
-Thanks to all the [Swampers](http://www.theswamp.org/index.php) who helped me learning AutoCAD .NET programming, with a special mention to Tony 'TheMaster' Tanzillo and Thorsten 'kaefer' Meinecke for the discussions about the GetObject<T> and GetObjects<T> methods which were the starts points of this library.
+Thanks to all the [Swampers](http://www.theswamp.org/index.php) who helped me learning AutoCAD .NET programming, with a special mention to Tony 'TheMaster' Tanzillo and Thorsten 'kaefer' Meinecke for the discussions about the GetObject<T> and GetObjects<T> methods which were the start points of this library.
 
 #### This library should help to write code in a more concise and declarative way.
 Example with a method to erase lines in model space which are smaller than a given distance:
@@ -50,6 +50,6 @@ public void EraseShortLines(double minLength)
 
 Reference one of these assemblies in AutoCAD .NET projects setting the Copy Locale property to True.
 
-Download the [assemblies](https://gilecad.azurewebsites.net/Resources/Gile.AutoCAD.Extension.zip) (Gile.AutoCAD.R20.Extension.dll for AutoCAD 2015 to 2024 or Gile.AutoCAD.R25.Extension.dll for AutoCAD 2025+).
+Download the [assemblies](https://gilecad.azurewebsites.net/Resources/Gile.AutoCAD.Extension.zip) (Gile.AutoCAD.R20.Extension.dll for AutoCAD 2015 to 2024, Gile.AutoCAD.R25.Extension.dll for AutoCAD 2025+).
 
 See the [documentation](https://gilecad.azurewebsites.net/Resources/AcadExtensionHelp/index.html).
