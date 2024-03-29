@@ -4,7 +4,7 @@ using Autodesk.AutoCAD.Geometry;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Gile.AutoCAD.Extension
+namespace Gile.AutoCAD.R20.Extension
 {
     /// <summary>
     /// Provides extension methods for the DBText type.

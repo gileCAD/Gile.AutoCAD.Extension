@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gile.AutoCAD.Extension
+namespace Gile.AutoCAD.R20.Extension
 {
     /// <summary>
     /// Provides extension methods for the SymbolTable type.
