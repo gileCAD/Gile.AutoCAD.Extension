@@ -47,7 +47,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Gets the named object dictionary.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The named object dictionary.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
@@ -64,7 +64,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Gets the model space block table record.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The model space.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
@@ -81,7 +81,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Gets the current space block table record.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The current space.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
@@ -98,7 +98,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Gets the block table record of each layout.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="exceptModel">Value indicating if the model space layout is left out.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <returns>The sequence of block table records.</returns>
@@ -116,7 +116,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Gets the layouts.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="exceptModel">Value indicating if the model space layout is left out.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
@@ -142,7 +142,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Gets the layouts names.
         /// </summary>
         /// <param name="db">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <returns>The sequence of layout names.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>

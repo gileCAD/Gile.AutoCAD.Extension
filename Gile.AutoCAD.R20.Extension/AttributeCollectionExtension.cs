@@ -13,7 +13,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Opens the attribute references in the given open mode.
         /// </summary>
         /// <param name="source">Attribute collection.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayers">Value indicating if locked layers should be opened.</param>

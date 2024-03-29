@@ -17,7 +17,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// </summary>
         /// <typeparam name="T">Type of objects to return.</typeparam>
         /// <param name="btr">Block table record.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="mode">Open mode to obtain in.</param>
         /// <param name="openErased">Value indicating whether to obtain erased objects.</param>
         /// <param name="forceOpenOnLockedLayers">Value indicating if locked layers should be opened.</param>
@@ -59,7 +59,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Appends the entities to the BlockTableRecord.
         /// </summary>
         /// <param name="owner">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="entities">Sequence of entities.</param>
         /// <returns>The collection of added entities ObjectId.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="owner"/> is null.</exception>
@@ -106,7 +106,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Appends the entity to the BlockTableRecord.
         /// </summary>
         /// <param name="owner">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="entity">Entity to add.</param>
         /// <returns>The ObjectId of added entity.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="owner"/> is null.</exception>
@@ -135,7 +135,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Inserts a block reference.
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="blkName">Nlock name.</param>
         /// <param name="insertPoint">Insertion point.</param>
         /// <param name="xScale">X scale factor.</param>
@@ -186,7 +186,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Synchronizes the attributes of all block references.
         /// </summary>
         /// <param name="target">Instance which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         public static void SynchronizeAttributes(this BlockTableRecord target, Transaction tr)

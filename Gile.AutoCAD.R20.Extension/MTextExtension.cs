@@ -82,7 +82,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// Mirrors the mtext honoring the value of MIRRTEXT system variable.
         /// </summary>
         /// <param name="source">Instance to which the method applies.</param>
-        /// <param name="tr">Transaction or OpenCloseTransaction tu use.</param>
+        /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="axis">Axis of the mirroring operation.</param>
         /// <param name="eraseSource">Value indicating if the source block reference have to be erased.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="source"/> is null.</exception>
