@@ -1,7 +1,7 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 
-namespace Gile.AutoCAD.R25.Extension
+namespace Gile.AutoCAD.Extension
 {
     /// <summary>
     /// Provides extension methods for the DBObject type.

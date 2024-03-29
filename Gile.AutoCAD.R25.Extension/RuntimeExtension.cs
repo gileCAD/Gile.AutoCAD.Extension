@@ -2,7 +2,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Gile.AutoCAD.R25.Extension
+namespace Gile.AutoCAD.Extension
 {
     /// <summary>
     /// Provides extension related to AutoCAD Runtime.

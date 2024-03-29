@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Gile.AutoCAD.R25.Extension
+namespace Gile.AutoCAD.Extension
 {
     /// <summary>
     /// Defines methods to add or removes items from a sequence of disposable objects.

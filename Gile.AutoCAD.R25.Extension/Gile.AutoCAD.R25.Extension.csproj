@@ -3,19 +3,19 @@
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<OutputType>Library</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<AssemblyTitle>Gile.AutoCAD.R25.Extension</AssemblyTitle>
+		<AssemblyTitle>Gile.AutoCAD.Extension</AssemblyTitle>
 		<Company>gileCAD</Company>
-		<Product>Gile.AutoCAD.R25.Extension</Product>
+		<Product>Gile.AutoCAD.Extension</Product>
 		<Copyright>Copyright © Gilles Chanteau 2017</Copyright>
 		<AssemblyVersion>2.0.0.0</AssemblyVersion>
 		<FileVersion>2.0.0.0</FileVersion>
 		<PlatformTarget>x64</PlatformTarget>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<RootNamespace>Gile.AutoCAD.R25.Extension</RootNamespace>
+		<RootNamespace>Gile.AutoCAD.Extension</RootNamespace>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DocumentationFile>bin\Release\Gile.AutoCAD.R25.Extension.xml</DocumentationFile>
+		<DocumentationFile>bin\Release\Gile.AutoCAD.Extension.xml</DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />

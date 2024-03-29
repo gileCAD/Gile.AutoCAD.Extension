@@ -7,7 +7,7 @@ using AcAp = Autodesk.AutoCAD.ApplicationServices;
 // Inspired by Scott McFarlane
 // https://www.autodesk.com/autodesk-university/class/Being-Remarkable-C-NET-AutoCAD-Developer-2015#handout
 
-namespace Gile.AutoCAD.R25.Extension
+namespace Gile.AutoCAD.Extension
 {
     /// <summary>
     /// Provides easy access to several "active" objects in AutoCAD runtime environment.

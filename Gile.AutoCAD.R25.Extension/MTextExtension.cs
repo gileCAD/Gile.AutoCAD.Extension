@@ -3,7 +3,7 @@ using Autodesk.AutoCAD.Geometry;
 
 using System;
 
-namespace Gile.AutoCAD.R25.Extension
+namespace Gile.AutoCAD.Extension
 {
     /// <summary>
     /// Provides extension methods for the MText Type.

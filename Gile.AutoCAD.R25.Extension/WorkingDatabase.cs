@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Gile.AutoCAD.R25.Extension
+namespace Gile.AutoCAD.Extension
 {
     /// <summary>
     /// Provides a safe way to temporarily set the working database.
