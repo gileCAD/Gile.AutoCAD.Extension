@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gile.AutoCAD.Extension
+namespace Gile.AutoCAD.R25.Extension
 {
     /// <summary>
     /// Enumeration of offset side options

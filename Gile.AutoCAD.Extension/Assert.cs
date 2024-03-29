@@ -2,11 +2,12 @@
 using Autodesk.AutoCAD.Runtime;
 
 
-namespace Gile.AutoCAD.Extension
+namespace Gile.AutoCAD.R20.Extension
 {
     /// <summary>
     /// Provides methods to throw an exception if an assertion is wrong.
     /// </summary>
+    /// <remarks>This class is not available for projects tageting .NET 8.0 (since AutoCAD 2025).</remarks>
     public static class Assert
     {
         /// <summary>

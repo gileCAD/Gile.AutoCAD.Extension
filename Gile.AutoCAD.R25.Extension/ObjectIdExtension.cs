@@ -3,7 +3,7 @@ using Autodesk.AutoCAD.Runtime;
 
 using System.Runtime.InteropServices;
 
-namespace Gile.AutoCAD.Extension
+namespace Gile.AutoCAD.R25.Extension
 {
     /// <summary>
     /// Provides extension methods for the ObjectId type.

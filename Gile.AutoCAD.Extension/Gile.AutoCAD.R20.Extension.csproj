@@ -7,8 +7,8 @@
     <ProjectGuid>{32EBFF40-CE54-4B05-AEBA-2EEFFEDB443B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gile.AutoCAD.Extension</RootNamespace>
-    <AssemblyName>Gile.AutoCAD.Extension</AssemblyName>
+    <RootNamespace>Gile.AutoCAD.R20.Extension</RootNamespace>
+    <AssemblyName>Gile.AutoCAD.R20.Extension</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -34,7 +34,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Gile.AutoCAD.Extension.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Gile.AutoCAD.R20.Extension.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AcCoreMgd">

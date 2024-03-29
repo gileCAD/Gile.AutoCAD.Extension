@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Gile.AutoCAD.Extension
+namespace Gile.AutoCAD.R25.Extension
 {
     /// <summary>
     /// Provides extension methods for the AttributeCollection type.
