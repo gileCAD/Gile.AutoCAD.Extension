@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gile.AutoCAD.R20.Extension"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gile.AutoCAD.R25.Extension", "Gile.AutoCAD.R25.Extension\Gile.AutoCAD.R25.Extension.csproj", "{2F921473-0497-44E3-A535-76BC7900035D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gile.AutoCAD.R20.Extension", "Gile.AutoCAD.R20.Extension\Gile.AutoCAD.R20.Extension.csproj", "{32EBFF40-CE54-4B05-AEBA-2EEFFEDB443B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
