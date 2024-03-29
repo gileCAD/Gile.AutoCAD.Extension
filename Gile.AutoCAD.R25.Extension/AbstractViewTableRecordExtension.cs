@@ -1,7 +1,7 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
 
-namespace Gile.AutoCAD.Extension
+namespace Gile.AutoCAD.R25.Extension
 {
     /// <summary>
     /// Provides extension for the AbstractViewTableRecord type.

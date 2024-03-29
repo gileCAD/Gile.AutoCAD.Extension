@@ -5,7 +5,7 @@ using Autodesk.AutoCAD.Runtime;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gile.AutoCAD.Extension
+namespace Gile.AutoCAD.R25.Extension
 {
     /// <summary>
     /// Provides extension methods for the BlockTableRecord type.
