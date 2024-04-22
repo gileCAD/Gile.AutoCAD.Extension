@@ -347,7 +347,7 @@ namespace Gile.AutoCAD.R20.Extension
                 case nameof(RegAppTable): return db.RegAppTableId;
                 case nameof(TextStyleTable): return db.TextStyleTableId;
                 case nameof(UcsTable): return db.UcsTableId;
-                case nameof(ViewTable): return db.ViewportTableId;
+                case nameof(ViewTable): return db.ViewTableId;
                 case nameof(ViewportTable): return db.ViewportTableId;
                 default:
                     throw new NotImplementedException();
