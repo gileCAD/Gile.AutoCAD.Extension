@@ -264,8 +264,7 @@ namespace Gile.AutoCAD.R20.Extension
             this Database targetDb, string sourceFileName, string recordName, DuplicateRecordCloning cloning)
             where T : SymbolTable
         {
-            if (targetDb is null)
-                throw new ArgumentNullException(nameof(targetDb));
+            Assert.IsNotNull(targetDb, nameof(targetDb));
 
             using (var sourceDb = new Database(false, true))
             {
@@ -301,8 +300,7 @@ namespace Gile.AutoCAD.R20.Extension
             this Database targetDb, string sourceFileName, string pattern, DuplicateRecordCloning cloning)
             where T : SymbolTable
         {
-            if (targetDb is null)
-                throw new ArgumentNullException(nameof(targetDb));
+            Assert.IsNotNull(targetDb, nameof(targetDb));
 
             using (var sourceDb = new Database(false, true))
             {
@@ -336,7 +334,7 @@ namespace Gile.AutoCAD.R20.Extension
         /// <exception cref="NotImplementedException"></exception>
         public static ObjectId GetTableId<T>(this Database db) where T : SymbolTable
         {
-            if (db is null) throw new ArgumentNullException(nameof(db));
+            Assert.IsNotNull(db, nameof(db));
 
             switch (typeof(T).Name)
             {
