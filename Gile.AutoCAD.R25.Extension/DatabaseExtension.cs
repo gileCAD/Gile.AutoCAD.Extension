@@ -337,7 +337,7 @@ namespace Gile.AutoCAD.R25.Extension
                 nameof(RegAppTable) => db.RegAppTableId,
                 nameof(TextStyleTable) => db.TextStyleTableId,
                 nameof(UcsTable) => db.UcsTableId,
-                nameof(ViewTable) => db.ViewportTableId,
+                nameof(ViewTable) => db.ViewTableId,
                 nameof(ViewportTable) => db.ViewportTableId,
                 _ => throw new NotImplementedException(),
             };
