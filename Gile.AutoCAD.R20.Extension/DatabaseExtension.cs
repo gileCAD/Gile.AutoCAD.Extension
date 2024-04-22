@@ -1,6 +1,7 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -247,6 +248,110 @@ namespace Gile.AutoCAD.R20.Extension
                 }
             }
             db.SummaryInfo = summaryInfoBuilder.ToDatabaseSummaryInfo();
+        }
+
+        /// <summary>
+        /// Imports the symbol table record from the specified file.
+        /// </summary>
+        /// <typeparam name="T">Type of SymbolTable.</typeparam>
+        /// <param name="targetDb">Instance to which the method applies.</param>
+        /// <param name="sourceFileName">Complete path of the source file.</param>
+        /// <param name="cloning">Input action for duplicate records</param>
+        /// <param name="recordName">Name of the record to import.</param>
+        /// <returns>The ObjectId of the imported record; ObjectId.Null if cloning failed.</returns>
+        /// <exception cref="System.ArgumentNullException">Lancée si l'instance à laquelle s'applique la méthode est null.</exception>
+        public static ObjectId ImportSymbolTableRecord<T>(
+            this Database targetDb, string sourceFileName, DuplicateRecordCloning cloning, string recordName)
+            where T : SymbolTable
+        {
+            if (targetDb is null)
+                throw new ArgumentNullException(nameof(targetDb));
+
+            using (var sourceDb = new Database(false, true))
+            {
+                sourceDb.ReadDwgFile(sourceFileName, FileOpenMode.OpenForReadAndAllShare, false, null);
+                using (Transaction tr = sourceDb.TransactionManager.StartTransaction())
+                {
+                    var sourceTable = (T)tr.GetObject(sourceDb.GetTableId<T>(), OpenMode.ForRead);
+                    if (!sourceTable.Has(recordName))
+                        return ObjectId.Null;
+                    ObjectId sourceTableRecordId = sourceTable[recordName];
+                    var ids = new ObjectIdCollection { sourceTableRecordId };
+                    var mapping = new IdMapping();
+                    sourceDb.WblockCloneObjects(ids, targetDb.GetTableId<T>(), mapping, cloning, false);
+                    tr.Commit();
+                    return mapping[sourceTableRecordId].IsCloned ?
+                        mapping[sourceTableRecordId].Value :
+                        ObjectId.Null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Imports the symbol table records from the specified file.
+        /// </summary>
+        /// <typeparam name="T">Type of SymbolTable.</typeparam>
+        /// <param name="targetDb">Instance to which the method applies.</param>
+        /// <param name="sourceFileName">Complete path of the source file.</param>
+        /// <param name="cloning">Input action for duplicate records</param>
+        /// <param name="recordNames">Names of the records to import.</param>
+        /// <returns>A dictionary containing the names and ObjectIds of the imported records.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="targetDb"/> is null.</exception>
+        public static Dictionary<string, ObjectId> ImportSymbolTableRecords<T>(
+            this Database targetDb, string sourceFileName, DuplicateRecordCloning cloning, params string[] recordNames)
+            where T : SymbolTable
+        {
+            if (targetDb is null)
+                throw new ArgumentNullException(nameof(targetDb));
+
+            using (var sourceDb = new Database(false, true))
+            {
+                sourceDb.ReadDwgFile(sourceFileName, FileOpenMode.OpenForReadAndAllShare, false, null);
+                using (Transaction tr = sourceDb.TransactionManager.StartTransaction())
+                {
+                    var sourceTable = (T)tr.GetObject(sourceDb.GetTableId<T>(), OpenMode.ForRead);
+                    var ids = new ObjectIdCollection(recordNames
+                        .Where(n => sourceTable.Has(n))
+                        .Select(n => sourceTable[n])
+                        .ToArray());
+                    var mapping = new IdMapping();
+                    sourceDb.WblockCloneObjects(ids, targetDb.GetTableId<T>(), mapping, cloning, false);
+                    tr.Commit();
+                    return recordNames
+                        .Where(n => sourceTable.Has(n))
+                        .Select(n => new { Name = n, IdPair = mapping[sourceTable[n]] })
+                        .Where(x => x.IdPair.IsCloned)
+                        .ToDictionary(x => x.Name, x => x.IdPair.Value);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the ObjectId of the specified SymbolTable.
+        /// </summary>
+        /// <typeparam name="T">Type of SymbolTable.</typeparam>
+        /// <param name="db">Instance to which the method applies.</param>
+        /// <returns>The ObjectId of the specified SymbolTable.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
+        /// <exception cref="NotImplementedException"></exception>
+        public static ObjectId GetTableId<T>(this Database db) where T : SymbolTable
+        {
+            if (db is null) throw new ArgumentNullException(nameof(db));
+
+            switch (typeof(T).Name)
+            {
+                case nameof(BlockTable): return db.BlockTableId;
+                case nameof(DimStyleTable): return db.DimStyleTableId;
+                case nameof(LayerTable): return db.LayerTableId;
+                case nameof(LinetypeTable): return db.LinetypeTableId;
+                case nameof(RegAppTable): return db.RegAppTableId;
+                case nameof(TextStyleTable): return db.TextStyleTableId;
+                case nameof(UcsTable): return db.UcsTableId;
+                case nameof(ViewTable): return db.ViewportTableId;
+                case nameof(ViewportTable): return db.ViewportTableId;
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }
