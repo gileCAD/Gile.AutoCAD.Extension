@@ -256,12 +256,12 @@ namespace Gile.AutoCAD.R25.Extension
         /// <typeparam name="T">Type of SymbolTable.</typeparam>
         /// <param name="targetDb">Instance to which the method applies.</param>
         /// <param name="sourceFileName">Complete path of the source file.</param>
-        /// <param name="cloning">Input action for duplicate records</param>
         /// <param name="recordName">Name of the record to import.</param>
+        /// <param name="cloning">Input action for duplicate records</param>
         /// <returns>The ObjectId of the imported record; ObjectId.Null if cloning failed.</returns>
-        /// <exception cref="System.ArgumentNullException">Lancée si l'instance à laquelle s'applique la méthode est null.</exception>
-        public static ObjectId ImportSymbolTableRecord<T>(
-            this Database targetDb, string sourceFileName, DuplicateRecordCloning cloning, string recordName)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="targetDb"/> is null.</exception>
+        public static ObjectId ImportRecord<T>(
+            this Database targetDb, string sourceFileName, string recordName, DuplicateRecordCloning cloning)
             where T : SymbolTable
         {
             ArgumentNullException.ThrowIfNull(targetDb);
@@ -283,17 +283,17 @@ namespace Gile.AutoCAD.R25.Extension
         }
 
         /// <summary>
-        /// Imports the symbol table records from the specified file.
+        /// Imports SymbolTableRecords whose names match the template supplied from the specified file.
         /// </summary>
         /// <typeparam name="T">Type of SymbolTable.</typeparam>
         /// <param name="targetDb">Instance to which the method applies.</param>
         /// <param name="sourceFileName">Complete path of the source file.</param>
-        /// <param name="cloning">Input action for duplicate records</param>
-        /// <param name="recordNames">Names of the records to import.</param>
+        /// <param name="pattern">WcMatch pattern.</param>
+        /// <param name="cloning">Input action for duplicate records.</param>
         /// <returns>A dictionary containing the names and ObjectIds of the imported records.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="targetDb"/> is null.</exception>
-        public static Dictionary<string, ObjectId> ImportSymbolTableRecords<T>(
-            this Database targetDb, string sourceFileName, DuplicateRecordCloning cloning, params string[] recordNames)
+        public static Dictionary<string, ObjectId> ImportRecords<T>(
+            this Database targetDb, string sourceFileName, string pattern, DuplicateRecordCloning cloning)
             where T : SymbolTable
         {
             ArgumentNullException.ThrowIfNull(targetDb);
@@ -302,18 +302,18 @@ namespace Gile.AutoCAD.R25.Extension
             sourceDb.ReadDwgFile(sourceFileName, FileOpenMode.OpenForReadAndAllShare, false, null);
             using Transaction tr = sourceDb.TransactionManager.StartTransaction();
             var sourceTable = (T)tr.GetObject(sourceDb.GetTableId<T>(), OpenMode.ForRead);
-            var ids = new ObjectIdCollection(recordNames
-                .Where(n => sourceTable.Has(n))
-                .Select(n => sourceTable[n])
-                .ToArray());
+            var records = sourceTable
+                .Cast<ObjectId>()
+                .Select(id => (SymbolTableRecord)tr.GetObject(id, OpenMode.ForRead))
+                .Where(r => Autodesk.AutoCAD.Internal.Utils.WcMatchEx(r.Name, pattern, true))
+                .ToDictionary(r => r.Name, r => r.ObjectId);
+            var ids = new ObjectIdCollection([.. records.Values]);
             var mapping = new IdMapping();
             sourceDb.WblockCloneObjects(ids, targetDb.GetTableId<T>(), mapping, cloning, false);
             tr.Commit();
-            return recordNames
-                .Where(n => sourceTable.Has(n))
-                .Select(n => new { Name = n, IdPair = mapping[sourceTable[n]] })
-                .Where(x => x.IdPair.IsCloned)
-                .ToDictionary(x => x.Name, x => x.IdPair.Value);
+            return records
+                .Where(r => mapping[r.Value].IsCloned)
+                .ToDictionary(r => r.Key, r => mapping[r.Value].Value);
         }
 
         /// <summary>
