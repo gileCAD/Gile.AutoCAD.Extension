@@ -83,7 +83,7 @@ namespace Gile.AutoCAD.R20.Extension
             Assert.IsNotNullOrWhiteSpace(tag, nameof(tag));
             Assert.IsNotNull(value, nameof(value));
 
-            foreach (AttributeReference attRef in target.AttributeCollection.GetObjects(tr))
+            foreach (AttributeReference attRef in target.AttributeCollection.GetObjects(tr, OpenMode.ForWrite))
             {
                 if (attRef.Tag == tag)
                 {
