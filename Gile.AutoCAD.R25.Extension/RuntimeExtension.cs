@@ -20,7 +20,7 @@ namespace Gile.AutoCAD.R25.Extension
         public static void ThrowIf(
             this ErrorStatus errorStatus,
             bool condition,
-            [CallerArgumentExpression("condition")] string? message = null)
+            [CallerArgumentExpression(nameof(condition))] string? message = null)
         {
             if (condition)
                 throw new Exception(errorStatus, message);
