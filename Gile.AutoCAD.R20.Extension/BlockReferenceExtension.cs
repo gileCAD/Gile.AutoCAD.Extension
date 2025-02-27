@@ -87,6 +87,7 @@ namespace Gile.AutoCAD.R20.Extension
             {
                 if (attRef.Tag == tag)
                 {
+                    tr.GetObject(attRef.ObjectId, OpenMode.ForWrite);
                     attRef.TextString = value;
                     return value;
                 }

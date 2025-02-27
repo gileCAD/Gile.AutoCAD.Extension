@@ -1,6 +1,7 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Runtime;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -247,6 +248,99 @@ namespace Gile.AutoCAD.R25.Extension
                 }
             }
             db.SummaryInfo = summaryInfoBuilder.ToDatabaseSummaryInfo();
+        }
+
+        /// <summary>
+        /// Imports the symbol table record from the specified file.
+        /// </summary>
+        /// <typeparam name="T">Type of SymbolTable.</typeparam>
+        /// <param name="targetDb">Instance to which the method applies.</param>
+        /// <param name="sourceFileName">Complete path of the source file.</param>
+        /// <param name="recordName">Name of the record to import.</param>
+        /// <param name="cloning">Input action for duplicate records</param>
+        /// <returns>The ObjectId of the imported record; ObjectId.Null if cloning failed.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="targetDb"/> is null.</exception>
+        public static ObjectId ImportRecord<T>(
+            this Database targetDb, string sourceFileName, string recordName, DuplicateRecordCloning cloning)
+            where T : SymbolTable
+        {
+            ArgumentNullException.ThrowIfNull(targetDb);
+
+            using var sourceDb = new Database(false, true);
+            sourceDb.ReadDwgFile(sourceFileName, FileOpenMode.OpenForReadAndAllShare, false, null);
+            using Transaction tr = sourceDb.TransactionManager.StartTransaction();
+            var sourceTable = (T)tr.GetObject(sourceDb.GetTableId<T>(), OpenMode.ForRead);
+            if (!sourceTable.Has(recordName))
+                return ObjectId.Null;
+            ObjectId sourceTableRecordId = sourceTable[recordName];
+            var ids = new ObjectIdCollection { sourceTableRecordId };
+            var mapping = new IdMapping();
+            sourceDb.WblockCloneObjects(ids, targetDb.GetTableId<T>(), mapping, cloning, false);
+            tr.Commit();
+            return mapping[sourceTableRecordId].IsCloned ?
+                mapping[sourceTableRecordId].Value :
+                ObjectId.Null;
+        }
+
+        /// <summary>
+        /// Imports SymbolTableRecords whose names match the template supplied from the specified file.
+        /// </summary>
+        /// <typeparam name="T">Type of SymbolTable.</typeparam>
+        /// <param name="targetDb">Instance to which the method applies.</param>
+        /// <param name="sourceFileName">Complete path of the source file.</param>
+        /// <param name="pattern">WcMatch pattern.</param>
+        /// <param name="cloning">Input action for duplicate records.</param>
+        /// <returns>A dictionary containing the names and ObjectIds of the imported records.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="targetDb"/> is null.</exception>
+        public static Dictionary<string, ObjectId> ImportRecords<T>(
+            this Database targetDb, string sourceFileName, string pattern, DuplicateRecordCloning cloning)
+            where T : SymbolTable
+        {
+            ArgumentNullException.ThrowIfNull(targetDb);
+
+            using var sourceDb = new Database(false, true);
+            sourceDb.ReadDwgFile(sourceFileName, FileOpenMode.OpenForReadAndAllShare, false, null);
+            using Transaction tr = sourceDb.TransactionManager.StartTransaction();
+            var sourceTable = (T)tr.GetObject(sourceDb.GetTableId<T>(), OpenMode.ForRead);
+            var records = sourceTable
+                .Cast<ObjectId>()
+                .Select(id => (SymbolTableRecord)tr.GetObject(id, OpenMode.ForRead))
+                .Where(r => Autodesk.AutoCAD.Internal.Utils.WcMatchEx(r.Name, pattern, true))
+                .ToDictionary(r => r.Name, r => r.ObjectId);
+            var ids = new ObjectIdCollection([.. records.Values]);
+            var mapping = new IdMapping();
+            sourceDb.WblockCloneObjects(ids, targetDb.GetTableId<T>(), mapping, cloning, false);
+            tr.Commit();
+            return records
+                .Where(r => mapping[r.Value].IsCloned)
+                .ToDictionary(r => r.Key, r => mapping[r.Value].Value);
+        }
+
+        /// <summary>
+        /// Gets the ObjectId of the specified SymbolTable.
+        /// </summary>
+        /// <typeparam name="T">Type of SymbolTable.</typeparam>
+        /// <param name="db">Instance to which the method applies.</param>
+        /// <returns>The ObjectId of the specified SymbolTable.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="db"/> is null.</exception>
+        /// <exception cref="NotImplementedException"></exception>
+        public static ObjectId GetTableId<T>(this Database db) where T : SymbolTable
+        {
+            ArgumentNullException.ThrowIfNull(db);
+
+            return typeof(T).Name switch
+            {
+                nameof(BlockTable) => db.BlockTableId,
+                nameof(DimStyleTable) => db.DimStyleTableId,
+                nameof(LayerTable) => db.LayerTableId,
+                nameof(LinetypeTable) => db.LinetypeTableId,
+                nameof(RegAppTable) => db.RegAppTableId,
+                nameof(TextStyleTable) => db.TextStyleTableId,
+                nameof(UcsTable) => db.UcsTableId,
+                nameof(ViewTable) => db.ViewTableId,
+                nameof(ViewportTable) => db.ViewportTableId,
+                _ => throw new NotImplementedException(),
+            };
         }
     }
 }
