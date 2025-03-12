@@ -38,15 +38,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AcCoreMgd">
-      <HintPath>F:\ObjectARX 2015\inc\AcCoreMgd.dll</HintPath>
+      <HintPath>F:\ObjectARX 2016\inc\AcCoreMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcDbMgd">
-      <HintPath>F:\ObjectARX 2015\inc\AcDbMgd.dll</HintPath>
+      <HintPath>F:\ObjectARX 2016\inc\AcDbMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcMgd">
-      <HintPath>F:\ObjectARX 2015\inc\AcMgd.dll</HintPath>
+      <HintPath>F:\ObjectARX 2016\inc\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -72,6 +72,7 @@
     <Compile Include="DBTextExtension.cs" />
     <Compile Include="DisposableList.cs" />
     <Compile Include="DisposableSet.cs" />
+    <Compile Include="DocumentCollectionExtension.cs" />
     <Compile Include="EditorExtension.cs" />
     <Compile Include="EntityExtension.cs" />
     <Compile Include="IDisposableCollection.cs" />
