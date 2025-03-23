@@ -12,12 +12,13 @@ namespace Gile.AutoCAD.R20.Extension
     public static class DBTextExtension
     {
         /// <summary>
-        /// Gets the center of the text bounding box.
+        /// Gets the 'text box' of the DBText instance.
         /// </summary>
         /// <param name="dbText">Instance to which the method applies.</param>
-        /// <returns>The center point of the text.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="dbText"/> is null.</exception>
-        public static Point3d GetTextBoxCenter(this DBText dbText)
+        /// <param name="point1">Lower left corner of the box ('DBText coordinate system').</param>
+        /// <param name="point2">Upper right corner of the box ('DBText coordinate system')</param>
+        /// <param name="transform">Transformation matrix from 'DBText coordinate system' to WCS.</param>
+        public static void GetTextBox(this DBText dbText, out Point3d point1, out Point3d point2, out Matrix3d transform)
         {
             Assert.IsNotNull(dbText, nameof(dbText));
 
@@ -32,17 +33,30 @@ namespace Gile.AutoCAD.R20.Extension
                     new TypedValue(71, mirrored),
                     new TypedValue(72, (int)dbText.HorizontalMode),
                     new TypedValue(73, (int)dbText.VerticalMode));
-            var xform =
+            var pt1 = new double[3];
+            var pt2 = new double[3];
+            acedTextBox(rb.UnmanagedObject, pt1, pt2);
+            point1 = new Point3d(pt1);
+            point2 = new Point3d(pt2);
+            transform =
                 Matrix3d.Displacement(dbText.Position.GetAsVector()) *
                 Matrix3d.Rotation(dbText.Rotation, dbText.Normal, Point3d.Origin) *
                 Matrix3d.PlaneToWorld(new Plane(Point3d.Origin, dbText.Normal));
-            var point1 = new double[3];
-            var point2 = new double[3];
-            acedTextBox(rb.UnmanagedObject, point1, point2);
+        }
+
+        /// <summary>
+        /// Gets the center of the text bounding box.
+        /// </summary>
+        /// <param name="dbText">Instance to which the method applies.</param>
+        /// <returns>The center point of the text.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name ="dbText"/> is null.</exception>
+        public static Point3d GetTextBoxCenter(this DBText dbText)
+        {
+            dbText.GetTextBox(out Point3d point1, out Point3d point2, out Matrix3d xform);
             return new Point3d(
-                (point1[0] + point2[0]) / 2.0,
-                (point1[1] + point2[1]) / 2.0,
-                (point1[2] + point2[2]) / 2.0)
+                (point1.X + point2.X) / 2.0,
+                (point1.Y + point2.Y) / 2.0,
+                (point1.Z + point2.Z) / 2.0)
                 .TransformBy(xform);
         }
 
@@ -54,32 +68,13 @@ namespace Gile.AutoCAD.R20.Extension
         /// <exception cref="ArgumentNullException">Thrown if <paramref name ="dbText"/> is null.</exception>
         public static Point3d[] GetTextBoxCorners(this DBText dbText)
         {
-            Assert.IsNotNull(dbText, nameof(dbText));
-
-            int mirrored = dbText.IsMirroredInX ? 2 : 0;
-            mirrored |= dbText.IsMirroredInY ? 4 : 0;
-            var rb = new ResultBuffer(
-                    new TypedValue(1, dbText.TextString),
-                    new TypedValue(40, dbText.Height),
-                    new TypedValue(41, dbText.WidthFactor),
-                    new TypedValue(51, dbText.Oblique),
-                    new TypedValue(7, dbText.TextStyleName),
-                    new TypedValue(71, mirrored),
-                    new TypedValue(72, (int)dbText.HorizontalMode),
-                    new TypedValue(73, (int)dbText.VerticalMode));
-            var point1 = new double[3];
-            var point2 = new double[3];
-            acedTextBox(rb.UnmanagedObject, point1, point2);
-            var xform =
-                Matrix3d.Displacement(dbText.Position.GetAsVector()) *
-                Matrix3d.Rotation(dbText.Rotation, dbText.Normal, Point3d.Origin) *
-                Matrix3d.PlaneToWorld(new Plane(Point3d.Origin, dbText.Normal));
+            dbText.GetTextBox(out Point3d point1, out Point3d point2, out Matrix3d xform);
             return new[]
             {
-                new Point3d(point1).TransformBy(xform),
-                new Point3d(point2[0], point1[1], 0.0).TransformBy(xform),
-                new Point3d(point2).TransformBy(xform),
-                new Point3d(point1[0], point2[1], 0.0).TransformBy(xform)
+                point1.TransformBy(xform),
+                new Point3d(point2.X, point1.Y, 0.0).TransformBy(xform),
+                point2.TransformBy(xform),
+                new Point3d(point1.X, point2.Y, 0.0).TransformBy(xform)
             };
         }
 
