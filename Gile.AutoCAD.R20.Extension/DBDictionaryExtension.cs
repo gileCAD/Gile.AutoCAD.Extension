@@ -188,17 +188,18 @@ namespace Gile.AutoCAD.R20.Extension
         /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it does not already exist.</param>
         /// <param name="data">Data</param>
+        /// <returns>The got or newlycreated Xrecord.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dictionary"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="data"/> is null.</exception>
-        public static void SetXrecordData(this DBDictionary dictionary, Transaction tr, string key, params TypedValue[] data)
+        public static Xrecord SetXrecordData(this DBDictionary dictionary, Transaction tr, string key, params TypedValue[] data)
         {
             Assert.IsNotNull(dictionary, nameof(dictionary));
             Assert.IsNotNull(tr, nameof(tr));
             Assert.IsNotNullOrWhiteSpace(key, nameof(key));
 
-            dictionary.SetXrecordData(tr, key, new ResultBuffer(data));
+            return dictionary.SetXrecordData(tr, key, new ResultBuffer(data));
         }
 
         /// <summary>
@@ -208,11 +209,12 @@ namespace Gile.AutoCAD.R20.Extension
         /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">Key of the xrecord, the xrecord is created if it does not already exist.</param>
         /// <param name="data">Data</param>
+        /// <returns>The got or newlycreated Xrecord.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="dictionary"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="data"/> is null.</exception>
-        public static void SetXrecordData(this DBDictionary dictionary, Transaction tr, string key, ResultBuffer data)
+        public static Xrecord SetXrecordData(this DBDictionary dictionary, Transaction tr, string key, ResultBuffer data)
         {
             Assert.IsNotNull(dictionary, nameof(dictionary));
             Assert.IsNotNull(tr, nameof(tr));
@@ -236,6 +238,7 @@ namespace Gile.AutoCAD.R20.Extension
                 tr.AddNewlyCreatedDBObject(xrecord, true);
             }
             xrecord.Data = data;
+            return xrecord;
         }
     }
 }
