@@ -92,16 +92,17 @@ namespace Gile.AutoCAD.R25.Extension
         /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">The xrecord key.</param>
         /// <param name="values">The new xrecord data.</param>
+        /// <returns>The got or newlycreated Xrecord.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
-        public static void SetXDictionaryXrecordData(this DBObject target, Transaction tr, string key, params TypedValue[] values)
+        public static Xrecord SetXDictionaryXrecordData(this DBObject target, Transaction tr, string key, params TypedValue[] values)
         {
             System.ArgumentNullException.ThrowIfNull(target);
             System.ArgumentNullException.ThrowIfNull(tr);
             System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
-            target.SetXDictionaryXrecordData(tr, key, new ResultBuffer(values));
+            return target.SetXDictionaryXrecordData(tr, key, new ResultBuffer(values));
         }
 
         /// <summary>
@@ -111,16 +112,17 @@ namespace Gile.AutoCAD.R25.Extension
         /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
         /// <param name="key">The xrecord key.</param>
         /// <param name="data">The new xrecord data.</param>
+        /// <returns>The got or newlycreated Xrecord.</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="target"/> is null.</exception>
         /// <exception cref="System.ArgumentNullException">Thrown if <paramref name ="tr"/> is null.</exception>
         /// <exception cref="System.ArgumentException">Thrown if <paramref name ="key"/> is null or empty.</exception>
-        public static void SetXDictionaryXrecordData(this DBObject target, Transaction tr, string key, ResultBuffer data)
+        public static Xrecord SetXDictionaryXrecordData(this DBObject target, Transaction tr, string key, ResultBuffer data)
         {
             System.ArgumentNullException.ThrowIfNull(target);
             System.ArgumentNullException.ThrowIfNull(tr);
             System.ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
-            target.GetOrCreateExtensionDictionary(tr).SetXrecordData(tr, key, data);
+            return target.GetOrCreateExtensionDictionary(tr).SetXrecordData(tr, key, data);
         }
 
         /// <summary>
