@@ -136,7 +136,7 @@ namespace Gile.AutoCAD.R25.Extension
         /// </summary>
         /// <param name="target">Instance to which the method applies.</param>
         /// <param name="tr">Transaction or OpenCloseTransaction to use.</param>
-        /// <param name="blkName">Nlock name.</param>
+        /// <param name="blkName">Block name.</param>
         /// <param name="insertPoint">Insertion point.</param>
         /// <param name="xScale">X scale factor.</param>
         /// <param name="yScale">Y scale factor.</param>
